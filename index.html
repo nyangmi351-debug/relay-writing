@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>고유어 릴레이 글쓰기</title>
+<style>
+:root{
+  --bg:#fff7ea; --card:#ffffff; --ink:#2d2a38; --sub:#756f86; --line:#efdfc4;
+  --orange:#ff8a3d; --orange-d:#e5701f; --green:#2fb36d; --green-d:#239557;
+  --red:#e5484d; --red-d:#c5353a; --blue:#3b82f6; --blue-d:#2b68cc; --r:18px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;min-height:100%}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.center{text-align:center}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:16px 18px;
+  box-shadow:0 4px 0 rgba(239,223,196,.7);margin-bottom:14px}
+.card h2{font-size:1.15rem;margin-bottom:10px}
+.small{font-size:.88rem;color:var(--sub)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1 1 auto}
+.stack>*+*{margin-top:10px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:2px solid var(--line);
+  background:#fff;border-radius:14px;padding:10px 16px;font-weight:700;cursor:pointer;min-height:46px;
+  transition:transform .08s,filter .15s}
+.btn:hover{filter:brightness(.96)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--orange);border-color:var(--orange-d);color:#fff}
+.btn.green{background:var(--green);border-color:var(--green-d);color:#fff}
+.btn.red{background:var(--red);border-color:var(--red-d);color:#fff}
+.btn.blue{background:var(--blue);border-color:var(--blue-d);color:#fff}
+.btn.ghost{background:transparent}
+.btn.big{font-size:1.1rem;padding:14px 22px;min-height:54px}
+.btn.huge{font-size:1.6rem;padding:18px 34px;border-radius:20px}
+
+.input{width:100%;border:2px solid var(--line);border-radius:14px;padding:11px 14px;background:#fffdf8;outline:none}
+.input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,61,.2)}
+textarea.input{resize:vertical;line-height:1.6}
+.field{margin-bottom:12px}
+.field label{display:block;font-weight:700;margin-bottom:4px}
+.fields-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;background:#fff1d9;border:1px solid #f4d9a8;
+  font-size:.85rem;font-weight:700;white-space:nowrap}
+.chip.green{background:#dff6e9;border-color:#a8e0c1;color:#1b7a47}
+.chip.blue{background:#e1ecff;border-color:#b5cdfa;color:#2456b0}
+.chip.gray{background:#eee;border-color:#ddd;color:#666}
+.chip.red{background:#ffe3e3;border-color:#f6b5b7;color:#b3262b}
+
+mark.word{background:linear-gradient(180deg,#ffe27a,#ffb347);color:#5a2a00;font-weight:800;
+  padding:.02em .38em;border-radius:.55em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* 토스트 */
+#toasts{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;
+  gap:8px;align-items:center;width:min(92vw,560px);pointer-events:none}
+.toast{pointer-events:auto;background:#2d2a38;color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);animation:tin .25s ease;transition:opacity .3s}
+.toast.ok{background:#1f9d5c}.toast.warn{background:#d9731a}.toast.error{background:#c5353a}
+.toast.out{opacity:0}
+@keyframes tin{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
+
+/* 홈 */
+.hero{padding:34px 0 18px}
+.hero .logo{font-size:64px}
+.hero h1{font-size:2.2rem;margin:6px 0}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:10px}
+.role{cursor:pointer;text-align:center;padding:26px 14px;border:3px solid var(--line);background:#fff;border-radius:24px;
+  transition:transform .12s,border-color .12s;font-weight:700}
+.role:hover{transform:translateY(-3px);border-color:var(--orange)}
+.role .emoji{font-size:54px}
+.role .t{font-size:1.4rem;margin-top:6px}
+.narrow{max-width:520px;margin:0 auto}
+
+/* 교사 */
+.topbar{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.bigcode{font-size:2.8rem;font-weight:900;letter-spacing:.08em;color:var(--orange-d);line-height:1.1}
+.qrblock{text-align:center}
+.qr{width:160px;min-height:160px;display:flex;align-items:center;justify-content:center;background:#fff;
+  padding:4px;border:2px solid var(--line);border-radius:12px;font-size:.8rem;color:var(--sub)}
+.qr img,.qr canvas{max-width:100%;height:auto}
+.toprow-btns{display:flex;flex-direction:column;gap:8px;margin-left:auto}
+.t-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:1000px){.t-grid{grid-template-columns:minmax(0,5fr) minmax(0,4fr)}}
+.qitem{border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;background:#fffdf8}
+.qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.qorder{background:var(--orange);color:#fff;border-radius:999px;min-width:28px;height:28px;display:inline-flex;
+  align-items:center;justify-content:center;font-weight:800;font-size:.9rem}
+.qname{font-weight:800;font-size:1.05rem}
+.qfoot{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap}
+.storybox{max-height:380px;overflow:auto;scroll-behavior:smooth}
+.sline{padding:8px 0;border-bottom:1px dashed var(--line)}
+.sline .who{display:inline-block;font-size:.8rem;font-weight:800;background:#e1ecff;color:#2456b0;border-radius:8px;
+  padding:1px 8px;margin-right:6px}
+.sline .who.teacher{background:#ffe9c7;color:#9a5200}
+.empty{color:var(--sub);text-align:center;padding:14px}
+
+/* 학생 */
+.s-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:900px){.s-grid{grid-template-columns:1fr 1fr}}
+.s-story{max-height:46vh;overflow:auto;scroll-behavior:smooth}
+@media(min-width:900px){.s-story{max-height:62vh}}
+.s-story .sline:last-child{background:#fff6e0;border-radius:10px;padding:8px 10px}
+.writebox textarea{font-size:1.15rem;min-height:140px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.wc{font-weight:800}
+.wc.ok{color:var(--green-d)} .wc.no{color:#d9731a}
+.notice{padding:10px 14px;border-radius:12px;background:#fff1d9;border:2px solid #f4d9a8;font-weight:700;margin-bottom:10px}
+.notice.wait{background:#e1ecff;border-color:#b5cdfa;color:#2456b0}
+.notice.end{background:#dff6e9;border-color:#a8e0c1;color:#1b7a47}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+
+/* TV */
+body.tv{background:#1d2342;color:#fff;overflow:hidden;height:100vh}
+.tv-wrap{height:100vh;display:flex;flex-direction:column;padding:1.2vh 1.5vw}
+.tv-head{display:flex;align-items:center;gap:1.5vw;padding:.6vh .5vw 1.2vh}
+.tv-head h1{font-size:clamp(1.3rem,2.6vw,2.8rem)}
+.tv-head .code{font-size:clamp(1.2rem,2.4vw,2.6rem);font-weight:900;color:#ffd34e;letter-spacing:.08em}
+.tv-head .qr{width:84px;min-height:84px;padding:3px;border-radius:8px}
+.tv-head .qr img,.tv-head .qr canvas{width:76px!important;height:76px!important}
+.tv-main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 30%;grid-template-rows:minmax(0,1fr);gap:1.2vw}
+@media(max-width:900px){.tv-main{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 34%}}
+.tv-panel{background:rgba(255,255,255,.08);border-radius:22px;padding:1.2vh 1.2vw;min-height:0;display:flex;
+  flex-direction:column;position:relative}
+.tv-panel h2{font-size:clamp(1rem,1.6vw,1.8rem);margin-bottom:1vh;color:#ffe7a8}
+.tv-story{flex:1;min-height:0;overflow-y:auto;scroll-behavior:smooth;padding-right:.5vw}
+.tv-entry{background:#fffaf0;color:#2d2a38;border-radius:18px;padding:1.2vh 1.2vw;margin-bottom:1.2vh;
+  font-size:clamp(1.3rem,2.5vw,2.8rem);line-height:1.6;font-weight:600}
+.tv-entry.pop{animation:pop .6s ease}
+.tv-entry .who{display:inline-block;font-size:.5em;font-weight:800;background:#e1ecff;color:#2456b0;border-radius:.6em;
+  padding:.1em .7em;margin-right:.6em;vertical-align:middle}
+.tv-entry .who.teacher{background:#ffe9c7;color:#9a5200}
+@keyframes pop{0%{transform:scale(.92);opacity:0;background:#fff3b0}60%{transform:scale(1.02);opacity:1}100%{transform:none;background:#fffaf0}}
+.tv-board{flex:1;min-height:0;overflow-y:auto}
+.cand{background:rgba(255,255,255,.14);border-radius:14px;padding:.9vh .9vw;margin-bottom:1vh;font-size:clamp(1rem,1.5vw,1.7rem);line-height:1.5}
+.cand b{color:#ffd34e}
+.tv-jump{position:absolute;left:50%;bottom:1.5vh;transform:translateX(-50%);z-index:5}
+.tv-banner{background:#2fb36d;color:#fff;border-radius:16px;padding:1.2vh 1.5vw;margin-bottom:1.2vh;font-size:clamp(1.1rem,2vw,2.2rem);font-weight:800;text-align:center}
+.tv-wait{margin:auto;text-align:center;font-size:clamp(1.4rem,3vw,3.2rem);font-weight:800;color:#ffe7a8}
+.tv-overlay{position:fixed;inset:0;background:rgba(15,18,40,.94);z-index:100;display:flex;align-items:center;justify-content:center;text-align:center}
+.tv-overlay .box{max-width:640px;padding:20px}
+.tv-overlay .big{font-size:80px}
+.tv-overlay p{color:#cfd3ee}
+.tv-overlay .btn+.btn{margin-top:12px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toasts" role="status" aria-live="polite"></div>
+<noscript>이 앱은 JavaScript가 켜져 있어야 작동해요.</noscript>
+
+<!-- 외부 라이브러리 (Firebase 10.14.1 호환 버전, QR 생성기) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- 여러분의 Firebase 설정값 (이 파일만 수정하면 됩니다) -->
+<script src="firebase-config.js"></script>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+ * 0. 작은 도우미 함수들
+ * ===================================================================== */
+const app = document.getElementById('app');
+
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+
+// 화면 요소를 안전하게 만드는 함수 (innerHTML을 쓰지 않아서 XSS 걱정이 없어요)
+function el(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  Object.entries(props || {}).forEach(([k, v]) => {
+    if (v === undefined || v === null || v === false) return;
+    if (k === 'class') e.className = v;
+    else if (k === 'value' || k === 'checked') e[k] = v;
+    else if (k.slice(0, 2) === 'on' && typeof v === 'function') e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  });
+  kids.flat(Infinity).forEach(kid => {
+    if (kid === null || kid === undefined || kid === false) return;
+    e.append(kid instanceof Node ? kid : String(kid));
+  });
+  return e;
+}
+
+function toast(msg, type, ms) {
+  const wrap = document.getElementById('toasts');
+  const t = el('div', { class: 'toast ' + (type || 'info') }, msg);
+  wrap.append(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 320); }, ms || 3200);
+}
+
+function friendlyError(e) {
+  const code = e && e.code ? String(e.code) : '';
+  const msg = (e && e.message) ? e.message : String(e);
+  if (code === 'PERMISSION_DENIED' || /permission_denied/i.test(msg))
+    return 'Firebase 규칙(Rules)에서 막혔어요. 안내서의 규칙을 다시 붙여넣고 [게시]를 눌러 주세요.';
+  if (/network|offline|timeout/i.test(msg)) return '인터넷 연결을 확인해 주세요.';
+  return msg;
+}
+
+function pad(n) { return String(n).padStart(4, '0'); }
+function baseUrl() { return location.href.split('#')[0].split('?')[0]; }
+function digitsOnly(v, n) { return String(v || '').replace(/\D/g, '').slice(0, n); }
+
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => toast('링크를 복사했어요 📋', 'ok'),
+      () => window.prompt('아래 링크를 복사해 주세요', text));
+  } else {
+    window.prompt('아래 링크를 복사해 주세요', text);
+  }
+}
+
+function makeQR(box, url) {
+  if (typeof QRCode === 'undefined') { box.textContent = 'QR을 불러오지 못했어요 (링크를 사용하세요)'; return; }
+  try { new QRCode(box, { text: url, width: 152, height: 152, correctLevel: QRCode.CorrectLevel.M }); }
+  catch (e) { box.textContent = 'QR 생성 실패'; }
+}
+
+/* ---- 문장 처리: [고유어] 표시, 어절 수 ---- */
+const MARK_RE = /\[([^\[\]]+)\]/g;
+
+// "[시나브로]" 부분을 <mark>로 바꿔 보여 줘요 (글자 굵게 + 주황/노랑 뱃지)
+function highlightNodes(text) {
+  const frag = document.createDocumentFragment();
+  const re = new RegExp(MARK_RE.source, 'g');
+  let last = 0, m;
+  text = String(text || '');
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) frag.append(text.slice(last, m.index));
+    frag.append(el('mark', { class: 'word' }, m[1]));
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) frag.append(text.slice(last));
+  return frag;
+}
+
+function countWords(text) {
+  const t = String(text || '').replace(/[\[\]]/g, '').trim();
+  return t ? t.split(/\s+/).length : 0;
+}
+function countMarks(text) { return (String(text || '').match(/\[[^\[\]]+\]/g) || []).length; }
+
+// 대괄호 짝이 맞는지 검사 (문제가 있으면 안내 문장을, 괜찮으면 '' 를 돌려줌)
+function validateBrackets(text) {
+  const rest = String(text || '').replace(/\[[^\[\]]+\]/g, '');
+  if (/[\[\]]/.test(rest))
+    return '대괄호 [ ] 가 짝이 맞지 않아요. 고유어는 드래그한 뒤 [고유어 강조] 버튼으로 표시해 주세요.';
+  return '';
+}
+
+// 학생 문장이 규칙에 맞는지 검사
+function checkSentence(text, room) {
+  const min = Math.max(1, Number(room.minWords) || 1);
+  const max = Number(room.maxWords) || 0;
+  if (!text) return '문장을 먼저 써 주세요.';
+  if (text.length > 300) return '문장이 너무 길어요. 300자 이내로 줄여 주세요.';
+  const b = validateBrackets(text);
+  if (b) return b;
+  const n = countWords(text);
+  if (n < min) return '최소 ' + min + '어절 이상 써야 해요. (지금 ' + n + '어절)';
+  if (max > 0 && n > max) return '최대 ' + max + '어절까지만 쓸 수 있어요. (지금 ' + n + '어절)';
+  if (room.requireWord && countMarks(text) < 1)
+    return '고유어를 1개 이상 드래그해서 [고유어 강조] 버튼으로 표시해 주세요.';
+  return '';
+}
+
+// textarea 안에서 선택한 부분을 [ ] 로 감싸기
+function applyHighlight(value, start, end) {
+  let s = start, e = end;
+  while (s < e && /\s/.test(value[s])) s++;
+  while (e > s && /\s/.test(value[e - 1])) e--;
+  if (s >= e) return { error: '먼저 강조할 고유어를 드래그해서 선택해 주세요.' };
+  const sel = value.slice(s, e);
+  if (/[\[\]]/.test(sel)) return { error: '이미 강조한 부분이 포함돼 있어요. 단어만 선택해 주세요.' };
+  if (/\s/.test(sel)) return { error: '고유어는 한 단어씩 강조해 주세요.' };
+  const re = /\[[^\[\]]*\]/g; let m;
+  while ((m = re.exec(value)) !== null) {
+    if (s >= m.index && e <= m.index + m[0].length) return { error: '이미 강조된 단어예요.' };
+  }
+  return { value: value.slice(0, s) + '[' + sel + ']' + value.slice(e), pos: e + 2 };
+}
+
+// 선택한(또는 커서가 놓인) 강조를 해제
+function removeHighlight(value, start, end) {
+  const re = /\[([^\[\]]*)\]/g; let m, out = '', last = 0, removed = 0;
+  while ((m = re.exec(value)) !== null) {
+    const a = m.index, b = a + m[0].length;
+    const hit = start === end ? (start > a && start < b) : (start < b && end > a);
+    out += value.slice(last, a);
+    if (hit) { out += m[1]; removed++; } else out += m[0];
+    last = b;
+  }
+  out += value.slice(last);
+  if (!removed) return { error: '해제할 강조 단어를 터치(또는 드래그)한 뒤 눌러 주세요.' };
+  return { value: out };
+}
+
+function sortedStory(room) {
+  return Object.values((room && room.story) || {}).sort((a, b) => (a.id || 0) - (b.id || 0));
+}
+
+/* =====================================================================
+ * 1. Firebase 연결
+ * ===================================================================== */
+let db = null;
+const TS = () => firebase.database.ServerValue.TIMESTAMP;
+const INC = n => firebase.database.ServerValue.increment(n);
+const roomRef = code => db.ref('rooms/' + code);
+
+function configOk() {
+  const c = window.FIREBASE_CONFIG;
+  return !!(c && c.apiKey && c.databaseURL && !/여기에|YOUR_/.test(JSON.stringify(c)));
+}
+
+/* =====================================================================
+ * 2. 화면 전환 / 실시간 구독 관리
+ * ===================================================================== */
+let cleanups = [];
+function onLeave(fn) { cleanups.push(fn); }
+
+function go(viewFn, ...args) {
+  cleanups.forEach(f => { try { f(); } catch (e) {} });
+  cleanups = [];
+  app.replaceChildren();
+  document.body.className = '';
+  window.scrollTo(0, 0);
+  viewFn(...args);
+}
+
+// 데이터베이스의 값이 바뀔 때마다 실시간으로 알려 주는 함수
+function watch(ref, onData) {
+  const cb = ref.on('value', onData, err => {
+    console.error(err);
+    toast('데이터를 불러오지 못했어요: ' + friendlyError(err), 'error', 6000);
+  });
+  onLeave(() => ref.off('value', cb));
+}
+
+function viewMessage(emoji, title, text, btnText, btnFn) {
+  document.body.className = '';
+  app.replaceChildren(el('div', { class: 'wrap narrow center' },
+    el('div', { class: 'card stack' },
+      el('div', { style: 'font-size:56px' }, emoji),
+      el('h2', {}, title),
+      el('p', {}, text),
+      btnText ? el('button', { class: 'btn primary big', onclick: btnFn || (() => go(viewHome)) }, btnText) : null)));
+}
+
+function viewClosed(text) {
+  viewMessage('🔒', '방이 닫혔어요', text || '방을 찾을 수 없거나 이미 삭제되었어요.', '처음으로', () => go(viewHome));
+}
+
+/* =====================================================================
+ * 3. 홈
+ * ===================================================================== */
+function viewHome() {
+  document.body.className = 'home';
+  const role = (emoji, title, desc, fn, id) => el('div', { class: 'role', id, role: 'button', tabindex: '0', onclick: fn,
+    onkeydown: ev => { if (ev.key === 'Enter') fn(); } },
+    el('div', { class: 'emoji' }, emoji), el('div', { class: 't' }, title), el('div', { class: 'small' }, desc));
+  app.append(el('div', { class: 'wrap center' },
+    el('div', { class: 'hero' },
+      el('div', { class: 'logo' }, '📖'),
+      el('h1', {}, '고유어 릴레이 글쓰기'),
+      el('p', { class: 'small' }, '예쁜 우리말 고유어를 넣어 친구들과 이야기를 이어 써요!')),
+    el('div', { class: 'role-grid' },
+      role('👩‍🏫', '교사', '방을 만들고 문장을 승인해요', () => go(viewTeacherEntry), 'role-teacher'),
+      role('🧒', '학생', '방 코드를 입력하고 입장해요', () => go(viewStudentEntry, ''), 'role-student'),
+      role('📺', '대형 TV', '교실 TV에 이야기를 보여 줘요', () => go(viewTvEntry), 'role-tv'))));
+}
+
+/* =====================================================================
+ * 4. 교사 - 입장(방 만들기 / 다시 열기)
+ * ===================================================================== */
+async function createRoom(pin) {
+  for (let i = 0; i < 10; i++) {
+    const code = String(100000 + Math.floor(Math.random() * 900000));
+    const res = await roomRef(code).transaction(cur => cur === null ? {
+      teacherPin: pin, status: 'WAITING', minWords: 8, maxWords: 0, requireWord: false, round: 1, createdAt: Date.now()
+    } : undefined);
+    if (res.committed) return code;
+  }
+  throw new Error('방 코드를 만들지 못했어요. 잠시 뒤 다시 시도해 주세요.');
+}
+
+async function openRoom(code, pin) {
+  const snap = await roomRef(code).child('teacherPin').once('value');
+  if (!snap.exists()) throw new Error('없는 방 코드예요. 코드를 다시 확인해 주세요.');
+  if (String(snap.val()) !== pin) throw new Error('PIN 번호가 맞지 않아요.');
+  store.set('relay_teacher', { code, pin });
+  go(viewTeacherPanel, code);
+}
+
+function viewTeacherEntry() {
+  document.body.className = 'home';
+  const saved = store.get('relay_teacher');
+  const pinNew = el('input', { id: 'pin-new', class: 'input', type: 'password', inputmode: 'numeric', maxlength: '4',
+    placeholder: '숫자 4자리', autocomplete: 'off' });
+  const codeOld = el('input', { id: 'code-old', class: 'input', inputmode: 'numeric', maxlength: '6', placeholder: '6자리 방 코드',
+    value: saved ? saved.code : '' });
+  const pinOld = el('input', { id: 'pin-old', class: 'input', type: 'password', inputmode: 'numeric', maxlength: '4',
+    placeholder: 'PIN 4자리', autocomplete: 'off', value: saved ? saved.pin : '' });
+  [pinNew, pinOld].forEach(i => i.addEventListener('input', () => { i.value = digitsOnly(i.value, 4); }));
+  codeOld.addEventListener('input', () => { codeOld.value = digitsOnly(codeOld.value, 6); });
+
+  const createBtn = el('button', { id: 'btn-create', class: 'btn primary big', onclick: async () => {
+    const pin = pinNew.value;
+    if (!/^\d{4}$/.test(pin)) return toast('PIN은 숫자 4자리로 입력해 주세요.', 'warn');
+    createBtn.disabled = true;
+    try {
+      const code = await createRoom(pin);
+      store.set('relay_teacher', { code, pin });
+      go(viewTeacherPanel, code);
+    } catch (e) { toast(friendlyError(e), 'error', 6000); createBtn.disabled = false; }
+  } }, '✨ 새 방 만들기');
+
+  const openBtn = el('button', { id: 'btn-open', class: 'btn blue big', onclick: async () => {
+    if (!/^\d{6}$/.test(codeOld.value)) return toast('방 코드는 숫자 6자리예요.', 'warn');
+    if (!/^\d{4}$/.test(pinOld.value)) return toast('PIN은 숫자 4자리예요.', 'warn');
+    openBtn.disabled = true;
+    try { await openRoom(codeOld.value, pinOld.value); }
+    catch (e) { toast(friendlyError(e), 'error', 5000); openBtn.disabled = false; }
+  } }, '🔓 만든 방 다시 열기');
+
+  app.append(el('div', { class: 'wrap narrow' },
+    el('div', { class: 'center hero' }, el('div', { class: 'logo' }, '👩‍🏫'), el('h1', {}, '교사 화면')),
+    el('div', { class: 'card stack' },
+      el('h2', {}, '① 새 방 만들기'),
+      el('p', { class: 'small' }, '교사용 PIN 4자리를 정하세요. 방을 다시 열 때 필요해요.'),
+      pinNew, createBtn),
+    el('div', { class: 'card stack' },
+      el('h2', {}, '② 이미 만든 방 다시 열기'),
+      el('p', { class: 'small' }, '새로고침하거나 창을 닫았을 때 사용해요.'),
+      codeOld, pinOld, openBtn),
+    el('div', { class: 'center' }, el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '← 처음으로'))));
+}
+
+/* =====================================================================
+ * 5. 교사 - 진행 제어판
+ * ===================================================================== */
+function viewTeacherPanel(code) {
+  document.body.className = 'teacher';
+  let room = null, firstLoad = true, downloaded = false, approving = false, purging = false;
+  const nodes = {};   // 대기열 항목(입력 중인 교정 내용을 지키기 위해 재사용)
+  const stuUrl = baseUrl() + '?mode=student&room=' + code;
+  const tvUrl = baseUrl() + '?mode=tv&room=' + code;
+
+  const qrBlock = (title, url) => {
+    const box = el('div', { class: 'qr' }); makeQR(box, url);
+    return el('div', { class: 'qrblock' }, box, el('div', { class: 'small' }, title));
+  };
+  const statusChip = el('span', { class: 'chip' });
+  const topbar = el('header', { class: 'card topbar' },
+    el('div', {}, el('div', { class: 'small' }, '방 코드'),
+      el('div', { class: 'bigcode', id: 'room-code' }, code.slice(0, 3) + ' ' + code.slice(3)), statusChip),
+    qrBlock('📺 TV 접속 QR', tvUrl),
+    qrBlock('🧒 학생 입장 QR', stuUrl),
+    el('div', { class: 'toprow-btns' },
+      el('button', { class: 'btn blue', onclick: () => window.open(tvUrl, '_blank') }, '📺 TV 화면 열기'),
+      el('button', { class: 'btn', onclick: () => copyText(stuUrl) }, '🔗 학생 링크 복사'),
+      el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '🏠 처음으로')));
+
+  /* ---- 규칙 설정 ---- */
+  const firstInput = el('textarea', { id: 'first-sentence', class: 'input', rows: '3',
+    placeholder: '예) 내 배 속에서는 [시나브로] 거대한 꼬르륵 소리가 요동치기 시작했다.' });
+  const minInput = el('input', { id: 'min-words', class: 'input', type: 'number', min: '1', max: '50', value: '8' });
+  const maxInput = el('input', { id: 'max-words', class: 'input', type: 'number', min: '0', max: '100', placeholder: '제한 없음' });
+  const reqChk = el('input', { id: 'req-word', type: 'checkbox' });
+  const startBtn = el('button', { id: 'btn-start', class: 'btn primary big', onclick: startRelay }, '▶ 릴레이 시작');
+  const saveBtn = el('button', { id: 'btn-save', class: 'btn', onclick: saveRules }, '💾 규칙 저장');
+  const rulesCard = el('section', { class: 'card' },
+    el('h2', {}, '📝 규칙 설정'),
+    el('div', { class: 'field' }, el('label', {}, '릴레이 첫 문장'), firstInput,
+      el('div', { class: 'small' }, '고유어는 [시나브로] 처럼 대괄호로 감싸면 강조돼요. 시작한 뒤에는 첫 문장을 바꿀 수 없어요.')),
+    el('div', { class: 'fields-3' },
+      el('div', { class: 'field' }, el('label', {}, '최소 어절 수'), minInput),
+      el('div', { class: 'field' }, el('label', {}, '최대 어절 수'), maxInput)),
+    el('label', { class: 'row small', style: 'margin-bottom:12px;cursor:pointer' }, reqChk, ' 고유어 강조를 1개 이상 꼭 하도록 하기'),
+    el('div', { class: 'row' }, startBtn, saveBtn));
+
+  function readRules() {
+    const min = parseInt(minInput.value, 10);
+    const maxRaw = maxInput.value.trim();
+    const max = maxRaw === '' ? 0 : parseInt(maxRaw, 10);
+    if (!(min >= 1)) throw new Error('최소 어절 수는 1 이상으로 입력해 주세요.');
+    if (isNaN(max) || max < 0) throw new Error('최대 어절 수는 0 이상의 숫자로 입력해 주세요. (비우면 제한 없음)');
+    if (max > 0 && max < min) throw new Error('최대 어절 수는 최소 어절 수보다 크거나 같아야 해요.');
+    return { minWords: min, maxWords: max, requireWord: reqChk.checked };
+  }
+
+  async function startRelay() {
+    try {
+      const first = firstInput.value.replace(/\s+/g, ' ').trim();
+      if (!first) throw new Error('첫 문장을 입력해 주세요.');
+      const b = validateBrackets(first); if (b) throw new Error(b);
+      const up = Object.assign(readRules(), { status: 'PLAYING', round: 1, startedAt: TS() });
+      up['story/' + pad(1)] = { id: 1, author: '교사', text: first, timestamp: TS() };
+      await roomRef(code).update(up);
+      toast('릴레이를 시작했어요! 🎉', 'ok');
+    } catch (e) { toast(friendlyError(e), 'warn', 4500); }
+  }
+  async function saveRules() {
+    try { await roomRef(code).update(readRules()); toast('규칙을 저장했어요.', 'ok'); }
+    catch (e) { toast(friendlyError(e), 'warn', 4500); }
+  }
+
+  /* ---- 대기열 ---- */
+  const queueList = el('div', { id: 'queue-list' });
+  const queueEmpty = el('div', { class: 'empty' }, '아직 제출된 문장이 없어요. 학생들이 쓰는 중이에요 ✍️');
+  const queueCount = el('span', { class: 'chip' }, '0');
+  const queueCard = el('section', { class: 'card' },
+    el('h2', {}, '📬 승인 대기열 ', queueCount),
+    el('p', { class: 'small' }, '먼저 낸 순서로 보여요. 오탈자는 입력칸에서 고친 뒤 [승인]을 누르세요. 승인하면 나머지 제출은 정리되고 다음 문장으로 넘어가요.'),
+    queueEmpty, queueList);
+
+  function makeQueueItem(id) {
+    const orderEl = el('span', { class: 'qorder' });
+    const nameEl = el('span', { class: 'qname' });
+    const cntEl = el('span', { class: 'chip green' });
+    const wc = el('span', { class: 'small' });
+    const ta = el('textarea', { class: 'input', rows: '2' });
+    const btn = el('button', { class: 'btn green approve', onclick: () => approve(id, item) }, '✅ 승인');
+    const root = el('div', { class: 'qitem' },
+      el('div', { class: 'qhead' }, orderEl, nameEl, cntEl, wc),
+      ta,
+      el('div', { class: 'qfoot' }, el('span', { class: 'small' }, '✏️ 여기서 바로 교정할 수 있어요'), btn));
+    const item = { root, ta, btn, orderEl, nameEl, cntEl, remoteText: null, remoteNonce: null,
+      updateCount() { wc.textContent = countWords(ta.value) + '어절'; } };
+    ta.addEventListener('input', () => item.updateCount());
+    return item;
+  }
+
+  async function approve(id, item) {
+    if (approving) return;
+    if (!room || room.status !== 'PLAYING') return toast('지금은 승인할 수 없어요.', 'warn');
+    const finalText = item.ta.value.replace(/\s+/g, ' ').trim();
+    if (!finalText) return toast('문장이 비어 있어요.', 'warn');
+    const b = validateBrackets(finalText); if (b) return toast(b, 'warn', 4500);
+    approving = true; item.btn.disabled = true;
+    try {
+      const snap = await roomRef(code).child('pendingSubmissions/' + id).once('value');
+      if (!snap.exists()) { toast('이미 취소되었거나 처리된 제출이에요.', 'warn'); return; }
+      const sub = snap.val();
+      const lastId = sortedStory(room).reduce((m, s) => Math.max(m, s.id || 0), 0);
+      const nextId = lastId + 1;
+      const up = {};
+      up['story/' + pad(nextId)] = { id: nextId, author: sub.studentName, text: finalText, nonce: sub.nonce || null, timestamp: TS() };
+      up['pendingSubmissions'] = null;                                   // 다른 제출은 정리 → 다음 라운드
+      up['students/' + sub.studentName + '/approvedCount'] = INC(1);     // 승인 횟수 +1
+      up['round'] = INC(1);
+      await roomRef(code).update(up);
+      toast('✅ ' + sub.studentName + ' 학생의 문장을 승인했어요!', 'ok');
+    } catch (e) { toast('승인 실패: ' + friendlyError(e), 'error', 6000); }
+    finally { approving = false; item.btn.disabled = false; }
+  }
+
+  /* ---- 이야기 / 학생 / 종료 ---- */
+  const storyBox = el('div', { class: 'storybox', id: 'teacher-story' });
+  const storyCard = el('section', { class: 'card' }, el('h2', {}, '📖 지금까지의 이야기'), storyBox);
+  const stuBox = el('div', { class: 'row' });
+  const stuCard = el('section', { class: 'card' }, el('h2', {}, '🧒 참여 학생'), stuBox);
+
+  const endBtn = el('button', { id: 'btn-end', class: 'btn red', onclick: endRelay }, '⏹ 릴레이 종료 · TXT 다운로드');
+  const dlBtn = el('button', { id: 'btn-dl', class: 'btn blue', onclick: () => downloadTxt() }, '⬇ TXT 다운로드');
+  const purgeBtn = el('button', { id: 'btn-purge', class: 'btn', onclick: purge }, '🗑 방 닫기 (데이터 완전 삭제)');
+  const endHint = el('p', { class: 'small' });
+  const endCard = el('section', { class: 'card stack' }, el('h2', {}, '🏁 마무리'), endHint,
+    el('div', { class: 'row' }, endBtn, dlBtn, purgeBtn));
+
+  async function endRelay() {
+    if (!room || room.status !== 'PLAYING') return;
+    if (!confirm('릴레이를 종료할까요?\n종료하면 학생들은 더 이상 문장을 낼 수 없고, 이야기가 TXT 파일로 저장돼요.')) return;
+    try {
+      await roomRef(code).update({ status: 'ENDED', pendingSubmissions: null, endedAt: TS() });
+      downloadTxt();
+      toast('릴레이를 종료했어요. TXT 파일을 저장했는지 확인해 주세요.', 'ok', 5000);
+    } catch (e) { toast('종료 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  function fileStamp() {
+    const d = new Date(), p = n => String(n).padStart(2, '0');
+    return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes());
+  }
+  function downloadTxt() {
+    if (!room) return;
+    // 형식: 학생이름: 문장 내용 (고유어는 [대괄호]로 표시된 그대로)
+    const lines = sortedStory(room).map(s => s.author + ': ' + s.text);
+    const blob = new Blob(['\uFEFF' + lines.join('\r\n') + '\r\n'], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = '고유어릴레이_' + fileStamp() + '_' + code + '.txt';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    downloaded = true;
+    render();
+  }
+
+  async function purge() {
+    const msg = room && room.status === 'ENDED'
+      ? '방 데이터를 완전히 삭제할까요?\n삭제하면 되돌릴 수 없어요. (TXT 파일을 저장했는지 확인하세요)'
+      : '아직 릴레이가 끝나지 않았어요.\n그래도 방과 모든 데이터를 삭제할까요? 되돌릴 수 없어요.';
+    if (!confirm(msg)) return;
+    purging = true;
+    try {
+      await roomRef(code).remove();
+      store.del('relay_teacher');
+      toast('방 데이터를 모두 삭제했어요. 다음 수업에는 새 방을 만들어 주세요.', 'ok', 5000);
+      go(viewHome);
+    } catch (e) { purging = false; toast('삭제 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  /* ---- 화면 갱신 ---- */
+  function render() {
+    if (!room) return;
+    const st = room.status;
+    statusChip.textContent = st === 'WAITING' ? '⏳ 시작 전' : st === 'PLAYING' ? '🟢 진행 중' : '🏁 종료됨';
+    statusChip.className = 'chip ' + (st === 'PLAYING' ? 'green' : st === 'ENDED' ? 'gray' : 'blue');
+
+    if (firstLoad) {
+      firstLoad = false;
+      minInput.value = room.minWords || 8;
+      maxInput.value = room.maxWords ? room.maxWords : '';
+      reqChk.checked = !!room.requireWord;
+      const first = sortedStory(room)[0];
+      if (first) firstInput.value = first.text;
+    }
+    firstInput.disabled = st !== 'WAITING';
+    [minInput, maxInput, reqChk].forEach(i => { i.disabled = st === 'ENDED'; });
+    startBtn.hidden = st !== 'WAITING';
+    saveBtn.hidden = st !== 'PLAYING';
+    rulesCard.hidden = false;
+    queueCard.hidden = st !== 'PLAYING';
+    endBtn.hidden = st !== 'PLAYING';
+    dlBtn.hidden = st === 'WAITING';
+    purgeBtn.hidden = st === 'PLAYING';
+    purgeBtn.disabled = st === 'ENDED' && !downloaded;
+    endHint.textContent = st === 'WAITING' ? '아직 시작 전이에요. 첫 문장을 입력하고 [릴레이 시작]을 눌러 주세요.'
+      : st === 'PLAYING' ? '수업이 끝나면 [릴레이 종료]를 누르세요. 이야기가 TXT 파일로 저장돼요.'
+      : (downloaded ? '저장이 끝났어요. 이제 [방 닫기]를 눌러 데이터를 완전히 삭제할 수 있어요.'
+                    : '먼저 [TXT 다운로드]로 파일을 저장해야 [방 닫기]를 누를 수 있어요.');
+
+    // 대기열 (입력 중인 교정 내용이 지워지지 않도록 항목을 재사용)
+    const pend = room.pendingSubmissions || {};
+    const ids = Object.keys(pend).sort((a, b) => (pend[a].timestamp || 0) - (pend[b].timestamp || 0));
+    Object.keys(nodes).forEach(id => { if (!pend[id]) { nodes[id].root.remove(); delete nodes[id]; } });
+    ids.forEach((id, idx) => {
+      const sub = pend[id];
+      const stu = (room.students && room.students[sub.studentName]) || {};
+      let n = nodes[id];
+      if (!n) { n = makeQueueItem(id); nodes[id] = n; }
+      if (n.remoteText !== sub.text || n.remoteNonce !== (sub.nonce || null)) {
+        n.ta.value = sub.text; n.remoteText = sub.text; n.remoteNonce = sub.nonce || null; n.updateCount();
+      }
+      n.orderEl.textContent = String(idx + 1);
+      n.nameEl.textContent = sub.studentName;
+      n.cntEl.textContent = '승인 ' + (stu.approvedCount || 0) + '번';
+      if (queueList.children[idx] !== n.root) queueList.insertBefore(n.root, queueList.children[idx] || null);
+    });
+    queueEmpty.hidden = ids.length > 0;
+    queueCount.textContent = String(ids.length);
+
+    // 이야기
+    storyBox.replaceChildren(...sortedStory(room).map(s =>
+      el('div', { class: 'sline' }, el('span', { class: 'who' + (s.author === '교사' ? ' teacher' : '') }, s.author), highlightNodes(s.text))));
+    if (!storyBox.children.length) storyBox.append(el('div', { class: 'empty' }, '아직 이야기가 없어요.'));
+    storyBox.scrollTop = storyBox.scrollHeight;
+
+    // 학생
+    const stus = Object.entries(room.students || {});
+    stuBox.replaceChildren(...(stus.length
+      ? stus.map(([name, v]) => el('span', { class: 'chip' }, name + ' · 승인 ' + ((v && v.approvedCount) || 0)))
+      : [el('span', { class: 'small' }, '아직 입장한 학생이 없어요.')]));
+  }
+
+  watch(roomRef(code), snap => {
+    room = snap.val();
+    if (!room) { if (!purging) viewClosed('방이 삭제되었거나 찾을 수 없어요.'); return; }
+    render();
+  });
+
+  app.append(el('div', { class: 'wrap' }, topbar,
+    el('div', { class: 't-grid' },
+      el('div', {}, rulesCard, queueCard),
+      el('div', {}, storyCard, stuCard, endCard))));
+}
+
+/* =====================================================================
+ * 6. 학생 - 입장
+ * ===================================================================== */
+async function joinRoom(code, name) {
+  const st = await roomRef(code).child('status').once('value');
+  if (!st.exists()) throw new Error('방을 찾을 수 없어요. 방 코드를 다시 확인해 주세요.');
+  if (st.val() === 'ENDED') throw new Error('이미 끝난 릴레이예요.');
+  const sRef = roomRef(code).child('students/' + name);
+  const sSnap = await sRef.once('value');
+  if (sSnap.exists()) {
+    await sRef.update({ lastActive: TS() });            // 같은 이름 → 기록 이어받기
+    return true;
+  }
+  await sRef.set({ approvedCount: 0, lastActive: TS(), joinedAt: TS() });
+  return false;
+}
+
+function viewStudentEntry(prefillCode) {
+  document.body.className = 'home';
+  const saved = store.get('relay_student') || {};
+  const codeIn = el('input', { id: 's-code', class: 'input', inputmode: 'numeric', maxlength: '6', placeholder: '6자리 방 코드',
+    value: prefillCode || saved.code || '' });
+  const nameIn = el('input', { id: 's-name', class: 'input', maxlength: '6', placeholder: '내 이름 (예: 홍길동)',
+    autocomplete: 'off', value: saved.name || '' });
+  codeIn.addEventListener('input', () => { codeIn.value = digitsOnly(codeIn.value, 6); });
+  const btn = el('button', { id: 'btn-join', class: 'btn primary big', onclick: async () => {
+    const code = codeIn.value, name = nameIn.value.trim();
+    if (!/^\d{6}$/.test(code)) return toast('방 코드는 숫자 6자리예요.', 'warn');
+    if (!/^[가-힣A-Za-z0-9]{2,6}$/.test(name)) return toast('이름은 공백 없이 한글 2~6글자로 써 주세요. (예: 홍길동)', 'warn', 4500);
+    btn.disabled = true;
+    try {
+      const again = await joinRoom(code, name);
+      store.set('relay_student', { code, name });
+      if (again) toast('다시 오신 걸 환영해요, ' + name + '! 기록을 이어받았어요 😊', 'ok');
+      go(viewStudentPlay, code, name);
+    } catch (e) { toast(friendlyError(e), 'error', 5000); btn.disabled = false; }
+  } }, '🚪 입장하기');
+  app.append(el('div', { class: 'wrap narrow' },
+    el('div', { class: 'center hero' }, el('div', { class: 'logo' }, '🧒'), el('h1', {}, '학생 입장')),
+    el('div', { class: 'card stack' }, codeIn, nameIn, btn,
+      el('p', { class: 'small' }, '💡 연결이 끊겨도 같은 이름으로 다시 입장하면 승인 횟수와 기록이 그대로 이어져요.')),
+    el('div', { class: 'center' }, el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '← 처음으로'))));
+}
+
+/* =====================================================================
+ * 7. 학생 - 작성 화면
+ * ===================================================================== */
+function viewStudentPlay(code, name) {
+  document.body.className = 'student';
+  let room = null, mySub = null;           // mySub: 내가 제출해서 승인을 기다리는 문장 {nonce, text}
+  let lastSel = { s: 0, e: 0 };
+  let lastStoryLen = -1;
+  const draftKey = 'relay_draft_' + code + '_' + name;
+
+  const countChip = el('span', { class: 'chip green', id: 's-count' }, '승인 0번');
+  const roundInfo = el('div', { class: 'small' });
+  const storyBox = el('div', { class: 's-story', id: 's-story' });
+  const notice = el('div', { class: 'notice', hidden: true });
+  const rule = el('div', { class: 'small' });
+  const ta = el('textarea', { id: 's-text', class: 'input', rows: '4', placeholder: '여기에 이어질 문장을 써 보세요.', maxlength: '400' });
+  ta.value = store.get(draftKey) || '';
+  const wc = el('span', { class: 'wc' });
+  const hlBtn = el('button', { id: 'btn-hl', class: 'btn', onclick: doHighlight }, '🖍 고유어 강조');
+  const unBtn = el('button', { id: 'btn-unhl', class: 'btn ghost', onclick: doUnhighlight }, '↩ 강조 해제');
+  const submitBtn = el('button', { id: 'btn-submit', class: 'btn primary big', onclick: submit }, '📤 제출하기');
+  const cancelBtn = el('button', { id: 'btn-cancel', class: 'btn red big', onclick: cancelSub }, '↩ 제출 취소');
+  [hlBtn, unBtn].forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));   // 드래그한 선택이 풀리지 않게
+  const mineBox = el('div', { class: 'stack' });
+
+  function rememberSel() { lastSel = { s: ta.selectionStart, e: ta.selectionEnd }; }
+  ['select', 'keyup', 'mouseup', 'touchend', 'input', 'blur', 'focus'].forEach(ev => ta.addEventListener(ev, rememberSel));
+  const selHandler = () => { if (document.activeElement === ta) rememberSel(); };
+  document.addEventListener('selectionchange', selHandler);
+  onLeave(() => document.removeEventListener('selectionchange', selHandler));
+  ta.addEventListener('input', () => { store.set(draftKey, ta.value); updateWc(); });
+
+  const locked = () => !room || room.status !== 'PLAYING' || !!mySub;
+
+  function setText(v, pos) {
+    ta.value = v; store.set(draftKey, v);
+    if (pos !== undefined) { try { ta.focus(); ta.setSelectionRange(pos, pos); } catch (e) {} lastSel = { s: pos, e: pos }; }
+    updateWc();
+  }
+  function doHighlight() {
+    if (locked()) return;
+    const r = applyHighlight(ta.value, lastSel.s, lastSel.e);
+    if (r.error) return toast(r.error, 'warn', 3800);
+    setText(r.value, r.pos);
+  }
+  function doUnhighlight() {
+    if (locked()) return;
+    const r = removeHighlight(ta.value, lastSel.s, lastSel.e);
+    if (r.error) return toast(r.error, 'warn', 3800);
+    setText(r.value, Math.min(lastSel.e, r.value.length));
+  }
+
+  function updateWc() {
+    const min = room ? Math.max(1, Number(room.minWords) || 1) : 1;
+    const max = room ? Number(room.maxWords) || 0 : 0;
+    const n = countWords(ta.value), k = countMarks(ta.value);
+    const ok = n >= min && (!max || n <= max);
+    wc.className = 'wc ' + (ok ? 'ok' : 'no');
+    wc.textContent = n + '어절' + (ok ? ' ✔' : '') + ' · 고유어 ' + k + '개';
+    rule.textContent = '조건: 최소 ' + min + '어절' + (max ? ' · 최대 ' + max + '어절' : '') +
+      (room && room.requireWord ? ' · 고유어 강조 1개 이상' : '');
+  }
+
+  async function submit() {
+    if (locked()) return;
+    const text = ta.value.replace(/\s+/g, ' ').trim();
+    const err = checkSentence(text, room);
+    if (err) { toast(err, 'warn', 4800); ta.classList.remove('shake'); void ta.offsetWidth; ta.classList.add('shake'); return; }
+    const nonce = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    mySub = { nonce, text };
+    setText(text);
+    render();
+    try {
+      const up = {};
+      up['pendingSubmissions/sub_' + name] = { studentName: name, text, nonce, timestamp: TS() };
+      up['students/' + name + '/lastActive'] = TS();
+      await roomRef(code).update(up);
+      toast('제출했어요! 선생님의 승인을 기다려요 ⏳', 'ok');
+    } catch (e) { mySub = null; render(); toast('제출 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  async function cancelSub() {
+    if (!mySub) return;
+    mySub = null;     // 먼저 비워 두면 "다른 친구가 뽑혔어요" 안내가 뜨지 않아요
+    render();
+    try { await roomRef(code).child('pendingSubmissions/sub_' + name).remove(); toast('제출을 취소했어요. 고쳐서 다시 낼 수 있어요 ✏️', 'ok'); }
+    catch (e) { toast('취소 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  function render() {
+    if (!room) return;
+    const st = room.status;
+    const story = sortedStory(room);
+    const me = (room.students && room.students[name]) || {};
+
+    countChip.textContent = '승인 ' + (me.approvedCount || 0) + '번';
+    roundInfo.textContent = st === 'PLAYING' ? '지금 ' + (story.length + 1) + '번째 문장을 이어 써요' : '';
+
+    if (story.length !== lastStoryLen) {
+      storyBox.replaceChildren(...story.map(s =>
+        el('div', { class: 'sline' }, el('span', { class: 'who' + (s.author === '교사' ? ' teacher' : '') }, s.author), highlightNodes(s.text))));
+      if (!story.length) storyBox.append(el('div', { class: 'empty' }, '이야기가 아직 시작되지 않았어요.'));
+      storyBox.scrollTop = storyBox.scrollHeight;
+      lastStoryLen = story.length;
+    }
+
+    const lock = locked();
+    ta.readOnly = lock;
+    hlBtn.disabled = lock; unBtn.disabled = lock;
+    submitBtn.hidden = !!mySub || st !== 'PLAYING';
+    cancelBtn.hidden = !mySub;
+    notice.hidden = false;
+    if (st === 'WAITING') { notice.className = 'notice wait'; notice.textContent = '⏳ 선생님이 곧 릴레이를 시작해요. 조금만 기다려 주세요!'; }
+    else if (st === 'ENDED') { notice.className = 'notice end'; notice.textContent = '🎉 릴레이가 끝났어요. 모두 수고했어요!'; }
+    else if (mySub) { notice.className = 'notice wait'; notice.textContent = '⏳ 선생님의 승인을 기다리는 중이에요. 고치고 싶으면 [제출 취소]를 누르세요.'; }
+    else notice.hidden = true;
+    updateWc();
+
+    const mine = story.filter(s => s.author === name);
+    mineBox.replaceChildren(...(mine.length
+      ? mine.map(s => el('div', { class: 'sline' }, highlightNodes(s.text)))
+      : [el('div', { class: 'small' }, '아직 승인받은 문장이 없어요. 힘내요! 💪')]));
+  }
+
+  watch(roomRef(code), snap => {
+    room = snap.val();
+    if (!room) { viewClosed('방이 닫혔어요. 선생님이 릴레이를 마무리했어요.'); return; }
+    const pend = room.pendingSubmissions && room.pendingSubmissions['sub_' + name];
+    if (mySub && !pend) {
+      // 내가 낸 문장이 대기열에서 사라짐 → 승인됐는지, 다른 친구가 먼저 뽑혔는지 확인
+      const approved = Object.values(room.story || {}).some(s => s.nonce === mySub.nonce);
+      if (approved) {
+        toast('🎉 내 문장이 이야기에 올라갔어요!', 'ok', 5000);
+        setText('');
+      } else if (room.status === 'PLAYING') {
+        setText(mySub.text);     // 내 문장은 그대로 남겨 두기 → 고쳐서 다음 라운드에 다시 제출
+        toast('다른 친구의 문장이 먼저 뽑혔어요. 내 문장은 그대로 남아 있으니 고쳐서 다시 내 보세요 💪', 'info', 7000);
+      }
+      mySub = null;
+    }
+    if (!mySub && pend) {         // 새로고침 후 다시 들어왔는데 승인 대기 중인 문장이 있는 경우
+      mySub = { nonce: pend.nonce, text: pend.text };
+      setText(pend.text);
+    }
+    render();
+  });
+
+  app.append(el('div', { class: 'wrap' },
+    el('header', { class: 'card row' },
+      el('div', { class: 'grow' }, el('h2', { style: 'margin:0' }, '🧒 ' + name + ' ', countChip), roundInfo),
+      el('span', { class: 'chip' }, '방 ' + code),
+      el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '나가기')),
+    el('div', { class: 's-grid' },
+      el('section', { class: 'card' }, el('h2', {}, '📖 우리의 이야기'), storyBox),
+      el('div', {},
+        el('section', { class: 'card writebox' },
+          el('h2', {}, '✍️ 내 문장 쓰기'),
+          notice, rule, ta,
+          el('div', { class: 'small', style: 'margin-top:6px' },
+            '① 문장을 쓰고 ② 고유어를 드래그해서 선택한 뒤 ③ [고유어 강조]를 눌러요. 한 문장에 여러 개도 괜찮아요!'),
+          el('div', { class: 'toolbar' }, hlBtn, unBtn, el('span', { class: 'grow' }), wc),
+          el('div', { class: 'row' }, submitBtn, cancelBtn)),
+        el('section', { class: 'card' }, el('h2', {}, '📚 내가 승인받은 문장'), mineBox)))));
+}
+
+/* =====================================================================
+ * 8. 대형 TV
+ * ===================================================================== */
+let audioCtx = null, soundOn = false;
+function initAudio() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!audioCtx && AC) audioCtx = new AC();
+    if (audioCtx && audioCtx.resume) audioCtx.resume();
+    soundOn = !!audioCtx;
+  } catch (e) { soundOn = false; }
+}
+// 경쾌한 "딩동댕" 효과음 (파일 없이 Web Audio로 직접 만들어요)
+function playChime() {
+  if (!audioCtx || !soundOn) return;
+  try {
+    const t0 = audioCtx.currentTime;
+    [[523.25, 0, .35], [659.25, .16, .35], [783.99, .32, .35], [1046.5, .48, .9]].forEach(([f, at, len]) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0 + at);
+      g.gain.exponentialRampToValueAtTime(0.35, t0 + at + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + len);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t0 + at); o.stop(t0 + at + len + 0.05);
+    });
+  } catch (e) {}
+}
+
+function viewTvEntry() {
+  document.body.className = 'home';
+  const codeIn = el('input', { id: 'tv-code', class: 'input', inputmode: 'numeric', maxlength: '6', placeholder: '6자리 방 코드' });
+  codeIn.addEventListener('input', () => { codeIn.value = digitsOnly(codeIn.value, 6); });
+  const go1 = () => { if (!/^\d{6}$/.test(codeIn.value)) return toast('방 코드는 숫자 6자리예요.', 'warn'); go(viewTvPlay, codeIn.value); };
+  codeIn.addEventListener('keydown', e => { if (e.key === 'Enter') go1(); });
+  app.append(el('div', { class: 'wrap narrow' },
+    el('div', { class: 'center hero' }, el('div', { class: 'logo' }, '📺'), el('h1', {}, '대형 TV 화면')),
+    el('div', { class: 'card stack' }, codeIn, el('button', { id: 'btn-tv', class: 'btn primary big', onclick: go1 }, '📺 TV 화면 시작')),
+    el('div', { class: 'center' }, el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '← 처음으로'))));
+}
+
+function viewTvPlay(code) {
+  document.body.className = 'tv';
+  let room = null, prevCount = null, lastUserScroll = 0;
+  const rendered = new Set();
+
+  const soundBtn = el('button', { class: 'btn ghost', style: 'color:#fff;border-color:rgba(255,255,255,.4)', onclick: () => {
+    if (soundOn) { soundOn = false; soundBtn.textContent = '🔇 소리 꺼짐'; }
+    else { initAudio(); playChime(); soundBtn.textContent = '🔔 소리 켜짐'; }
+  } }, '🔇 소리 꺼짐');
+
+  const overlay = el('div', { class: 'tv-overlay', id: 'tv-overlay' }, el('div', { class: 'box stack' },
+    el('div', { class: 'big' }, '📺'), el('h2', {}, '교실 TV 화면'),
+    el('p', {}, '버튼을 눌러 시작하면 문장이 승인될 때마다 "딩동댕" 효과음이 나와요.'),
+    el('button', { id: 'tv-sound-on', class: 'btn primary huge', onclick: () => {
+      initAudio(); playChime(); soundBtn.textContent = '🔔 소리 켜짐'; overlay.remove();
+    } }, '🔔 소리 켜고 시작'),
+    el('div', {}, el('button', { id: 'tv-sound-off', class: 'btn ghost', style: 'color:#fff;border-color:rgba(255,255,255,.4)',
+      onclick: () => overlay.remove() }, '소리 없이 보기'))));
+
+  const qrBox = el('div', { class: 'qr' }); makeQR(qrBox, baseUrl() + '?mode=student&room=' + code);
+  const head = el('div', { class: 'tv-head' },
+    el('h1', {}, '📖 고유어 릴레이 글쓰기'),
+    el('span', { class: 'grow' }),
+    el('div', {}, el('div', { class: 'small', style: 'color:#cfd3ee' }, '학생 입장 코드'),
+      el('div', { class: 'code', id: 'tv-room-code' }, code.slice(0, 3) + ' ' + code.slice(3))),
+    qrBox, soundBtn);
+
+  const storyBox = el('div', { class: 'tv-story', id: 'tv-story' });
+  const banner = el('div', { class: 'tv-banner', hidden: true }, '🎉 릴레이가 끝났어요! 모두 수고했어요 🎉');
+  const waitMsg = el('div', { class: 'tv-wait', hidden: true }, '⏳ 곧 시작해요!');
+  const jumpBtn = el('button', { class: 'btn primary tv-jump', hidden: true, onclick: () => { storyBox.scrollTop = storyBox.scrollHeight; jumpBtn.hidden = true; } }, '⬇ 최신 글로 이동');
+  const board = el('div', { class: 'tv-board', id: 'tv-board' });
+  const boardCount = el('span', { class: 'chip' }, '0');
+
+  ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(ev =>
+    storyBox.addEventListener(ev, () => { lastUserScroll = Date.now(); }, { passive: true }));
+  const nearBottom = () => storyBox.scrollHeight - storyBox.scrollTop - storyBox.clientHeight < 140;
+  storyBox.addEventListener('scroll', () => { if (nearBottom()) jumpBtn.hidden = true; });
+
+  function renderStory(list) {
+    const wasNear = nearBottom();
+    // 이야기는 늘어나기만 하므로 새 문장만 아래에 붙여요 (스크롤 위치 유지)
+    if (list.length < rendered.size) { storyBox.replaceChildren(); rendered.clear(); }
+    let added = 0;
+    list.forEach(s => {
+      const key = s.id + '|' + s.author;
+      if (rendered.has(key)) return;
+      rendered.add(key);
+      storyBox.append(el('div', { class: 'tv-entry' + (prevCount !== null ? ' pop' : '') },
+        el('span', { class: 'who' + (s.author === '교사' ? ' teacher' : '') }, s.author), highlightNodes(s.text)));
+      added++;
+    });
+    if (added) {
+      if (wasNear || Date.now() - lastUserScroll > 20000) { storyBox.scrollTop = storyBox.scrollHeight; jumpBtn.hidden = true; }
+      else jumpBtn.hidden = false;
+    }
+  }
+
+  function renderBoard() {
+    const pend = Object.values(room.pendingSubmissions || {}).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    boardCount.textContent = String(pend.length);
+    board.replaceChildren(...(pend.length
+      ? pend.map(p => el('div', { class: 'cand' }, el('b', {}, '익명: '), '"', highlightNodes(p.text), '"'))
+      : [el('div', { class: 'cand', style: 'opacity:.7' }, room.status === 'PLAYING' ? '친구들이 문장을 쓰는 중이에요 ✍️' : '')]));
+  }
+
+  watch(roomRef(code), snap => {
+    room = snap.val();
+    if (!room) { viewMessage('🔒', '방을 찾을 수 없어요', '방 코드를 다시 확인하거나, 선생님이 방을 닫았을 수 있어요.', '처음으로', () => go(viewHome)); return; }
+    const list = sortedStory(room);
+    const grew = prevCount !== null && list.length > prevCount;
+    renderStory(list);
+    if (grew) playChime();                 // 새 문장이 승인되어 올라올 때만 효과음
+    prevCount = list.length;
+    renderBoard();
+    waitMsg.hidden = room.status !== 'WAITING';
+    banner.hidden = room.status !== 'ENDED';
+  });
+
+  app.append(el('div', { class: 'tv-wrap' }, head,
+    el('div', { class: 'tv-main' },
+      el('section', { class: 'tv-panel' }, el('h2', {}, '📜 우리가 만든 이야기'), banner, waitMsg, storyBox, jumpBtn),
+      el('section', { class: 'tv-panel' }, el('h2', {}, '✍️ 쓰는 중인 문장 ', boardCount), board)),
+    overlay));
+}
+
+/* =====================================================================
+ * 9. 시작
+ * ===================================================================== */
+function boot() {
+  if (typeof firebase === 'undefined') {
+    return viewMessage('📡', '필요한 도구를 불러오지 못했어요',
+      '인터넷 연결을 확인하거나, 학교 네트워크에서 gstatic.com 접속이 막혀 있지 않은지 확인해 주세요.');
+  }
+  if (!configOk()) {
+    return viewMessage('🛠', 'Firebase 설정이 필요해요',
+      'firebase-config.js 파일에 Firebase 값(apiKey, databaseURL 등)을 붙여넣은 뒤 다시 열어 주세요.');
+  }
+  try { firebase.initializeApp(window.FIREBASE_CONFIG); db = firebase.database(); }
+  catch (e) {
+    console.error(e);
+    return viewMessage('⚠️', 'Firebase 연결에 실패했어요', friendlyError(e) + ' (firebase-config.js 값을 다시 확인해 주세요)');
+  }
+  const q = new URLSearchParams(location.search);
+  const mode = q.get('mode');
+  const room = digitsOnly(q.get('room'), 6);
+  if (mode === 'tv') return room.length === 6 ? go(viewTvPlay, room) : go(viewTvEntry);
+  if (mode === 'student') return go(viewStudentEntry, room);
+  if (mode === 'teacher') return go(viewTeacherEntry);
+  go(viewHome);
+}
+
+boot();
+})();
+</script>
+</body>
+</html>
