@@ -202,17 +202,35 @@ textarea.rw-edit[readonly]:focus{border-color:var(--line);box-shadow:none}
 
 /* ===== 바꿔쓰기 / 대기 - TV ===== */
 .tv-main.single{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
-.tv-rw-item{display:flex;gap:1vw;align-items:flex-start;background:rgba(255,255,255,.1);color:#cfd3ee;border-radius:18px;
-  padding:1.2vh 1.2vw;margin-bottom:1.2vh;font-size:clamp(1.2rem,2.2vw,2.5rem);line-height:1.5;font-weight:600}
-.tv-rw-item.done{background:#fffaf0;color:#2d2a38}
-.tv-rw-item.pop{animation:pop .6s ease}
-.tv-rw-num{flex:none;min-width:1.7em;height:1.7em;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;
-  display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.8em}
+.tv-rw-cols,.tv-rw-item{display:grid;grid-template-columns:clamp(2.2rem,4vw,4.6rem) minmax(0,1fr) minmax(0,1fr);gap:1vw;align-items:stretch}
+.tv-rw-cols{font-size:clamp(.9rem,1.3vw,1.5rem);font-weight:800;color:#9aa0c8;padding:0 calc(.8vw + 4px) .6vh}
+.tv-rw-cols .new{color:#ffe7a8}
+.tv-rw-cols span{padding-left:1vw}
+.tv-rw-item{font-size:clamp(1.1rem,1.9vw,2.2rem);line-height:1.5;font-weight:600;padding:.8vh .8vw;margin-bottom:1vh;
+  border-radius:20px;border:4px solid transparent;cursor:pointer;
+  transition:transform .35s ease,background .35s ease,box-shadow .35s ease,border-color .35s ease,margin .35s ease;
+  -webkit-tap-highlight-color:transparent}
+.tv-rw-item:hover{background:rgba(255,255,255,.04)}
+.tv-rw-num{align-self:center;justify-self:center;width:1.7em;height:1.7em;border-radius:999px;background:rgba(255,255,255,.2);
+  color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.85em}
 .tv-rw-item.done .tv-rw-num{background:#2fb36d}
-.tv-rw-by{display:inline-block;font-size:.55em;font-weight:800;background:#8b5cf6;color:#fff;border-radius:.6em;
+.tv-rw-orig{background:rgba(255,255,255,.1);color:#cfd3ee;border-radius:16px;padding:1vh 1vw;transition:background .35s,color .35s}
+.tv-rw-new{border-radius:16px;padding:1vh 1vw;border:2px dashed rgba(255,255,255,.22);display:flex;align-items:center;flex-wrap:wrap}
+.tv-rw-item.done .tv-rw-new{background:#fffaf0;color:#2d2a38;border:2px solid #fffaf0;display:block}
+.tv-rw-new.pop{animation:pop .6s ease}
+.tv-rw-by{display:inline-block;font-size:.6em;font-weight:800;background:#8b5cf6;color:#fff;border-radius:.6em;
   padding:.12em .7em;margin-left:.5em;vertical-align:middle;white-space:nowrap}
-.tv-rw-ch{font-size:.62em;color:#ffd34e;margin-top:.3em;font-weight:800}
-.tv-rw-tag{font-size:.5em;font-weight:800;color:#9aa0c8;margin-right:.6em;vertical-align:middle}
+.tv-rw-ch{font-size:.8em;color:#ffd34e;font-weight:800}
+/* 교사가 클릭한 문장: 순백 배경 + 노란 테두리 + 크게 */
+.tv-rw-item.hl{background:#fff;border-color:#ffd34e;transform:scale(1.015);
+  box-shadow:0 0 0 6px rgba(255,211,78,.35),0 14px 36px rgba(0,0,0,.45);position:relative;z-index:2;margin:1.4vh .6vw 2vh}
+.tv-rw-item.hl .tv-rw-orig{background:#f1f2f6;color:#2d2a38}
+.tv-rw-item.hl .tv-rw-new{border-color:#d6d3e0}
+.tv-rw-item.hl.done .tv-rw-new{background:#fff6dc;border-color:#ffe08a}
+.tv-rw-item.hl .tv-rw-ch{color:#c76a00}
+.tv-rw-item.hl .tv-rw-num{background:#ff8a3d}
+.tv-rw-item.hl.done .tv-rw-num{background:#2fb36d}
+@media(max-width:900px){.tv-rw-cols{display:none}.tv-rw-item{grid-template-columns:clamp(2.2rem,4vw,4.6rem) minmax(0,1fr)}.tv-rw-new{grid-column:2}}
 .tv-waitbig{margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.6vh}
 .tv-waitbig .code-big{font-size:clamp(3rem,9vw,9rem);font-weight:900;color:#ffd34e;letter-spacing:.1em;line-height:1}
 .tv-waitbig .qr{width:auto;min-height:0;padding:10px;border-radius:16px}
@@ -1590,15 +1608,46 @@ function viewTvRewrite(code) {
   ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(ev =>
     listBox.addEventListener(ev, () => { lastUserScroll = Date.now(); }, { passive: true }));
 
+  // 교사가 TV에서 문장을 클릭하면 그 문장만 강조 (이 TV 화면에서만, 한 번에 1개)
+  let hlKey = null;
+  function applyHighlight(scroll) {
+    Object.keys(items).forEach(x => items[x].root.classList.toggle('hl', x === hlKey));
+    if (scroll && hlKey && items[hlKey]) {
+      try { items[hlKey].root.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+    }
+  }
+  function setHighlight(k) {
+    hlKey = hlKey === k ? null : k;
+    applyHighlight(false);
+  }
+  // 키보드: ↓ → PageDown(프레젠터 리모컨) = 다음 문장, ↑ ← PageUp = 이전 문장, Esc = 강조 끄기
+  function moveHighlight(dir) {
+    const keys = Object.keys(items).sort();
+    if (!keys.length) return;
+    const i = keys.indexOf(hlKey);
+    if (i < 0) hlKey = dir > 0 ? keys[0] : keys[keys.length - 1];
+    else hlKey = keys[Math.min(keys.length - 1, Math.max(0, i + dir))];
+    applyHighlight(true);
+  }
+  const keyHandler = ev => {
+    if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+    const k = ev.key;
+    if (k === 'ArrowDown' || k === 'ArrowRight' || k === 'PageDown') { ev.preventDefault(); moveHighlight(1); }
+    else if (k === 'ArrowUp' || k === 'ArrowLeft' || k === 'PageUp') { ev.preventDefault(); moveHighlight(-1); }
+    else if (k === 'Escape' && hlKey) { hlKey = null; applyHighlight(false); }
+  };
+  document.addEventListener('keydown', keyHandler);
+  onLeave(() => document.removeEventListener('keydown', keyHandler));
+
   function makeItem(s) {
-    const textEl = el('span', {});
-    const tagEl = el('span', { class: 'tv-rw-tag' }, '원래 문장');
-    const byEl = el('span', { class: 'tv-rw-by', hidden: true });
-    const chEl = el('div', { class: 'tv-rw-ch', hidden: true });
-    const root = el('div', { class: 'tv-rw-item', id: 'tv-rw-' + s.key },
+    const newEl = el('div', { class: 'tv-rw-new' });
+    const root = el('div', { class: 'tv-rw-item', id: 'tv-rw-' + s.key, role: 'button', tabindex: '0',
+      onclick: () => setHighlight(s.key),
+      onkeydown: ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); setHighlight(s.key); } } },
       el('span', { class: 'tv-rw-num' }, String(s.id)),
-      el('div', { style: 'flex:1;min-width:0' }, el('div', {}, tagEl, textEl, byEl), chEl));
-    return { root, textEl, tagEl, byEl, chEl };
+      el('div', { class: 'tv-rw-orig' }, s.text),   // 왼쪽: 원래 문장
+      newEl);                                        // 오른쪽: 바꿔 쓴 문장 / 도전 중 이름
+    return { root, newEl };
   }
 
   watch(roomRef(code), snap => {
@@ -1612,30 +1661,32 @@ function viewTvRewrite(code) {
       let it = items[k];
       if (!it) { it = items[k] = makeItem(s); listBox.append(it.root); }
       const f = rwFinal(room, k);
+      const wasDone = it.root.classList.contains('done');
+      it.root.classList.toggle('done', !!f);
+      it.root.classList.toggle('hl', k === hlKey);
       if (f) {
-        const wasDone = it.root.classList.contains('done');
-        it.root.className = 'tv-rw-item done';
-        it.tagEl.hidden = true;
-        it.textEl.textContent = f.text;                       // 확정된 문장은 고정
-        it.byEl.hidden = false; it.byEl.textContent = f.author; // 승인된 학생 이름 (다른 색)
-        it.chEl.hidden = true;
+        // 확정된 문장은 고정 + 승인된 학생 이름 (다른 색)
+        if (!wasDone || it.newEl.dataset.v !== f.text + '|' + f.author) {
+          it.newEl.dataset.v = f.text + '|' + f.author;
+          it.newEl.replaceChildren(f.text, el('span', { class: 'tv-rw-by' }, f.author));
+        }
         if (!wasDone && prevFinal !== null) newly.push(it);
       } else {
-        it.root.className = 'tv-rw-item';
-        it.tagEl.hidden = false;
-        it.textEl.textContent = s.text;
-        it.byEl.hidden = true;
         // 수정 중이거나 제출한 문장 내용은 보여 주지 않고, 도전 중인 학생 이름만
         const names = room.status === 'PLAYING' ? rwChallengers(room, k) : [];
-        it.chEl.hidden = !names.length;
-        it.chEl.textContent = '✍️ 도전 중 ' + names.map(n => '(' + n + ')').join(' ');
+        const v = 'ch|' + names.join(',');
+        if (it.newEl.dataset.v !== v) {
+          it.newEl.dataset.v = v;
+          it.newEl.replaceChildren(...(names.length
+            ? [el('span', { class: 'tv-rw-ch' }, '✍️ 도전 중 ' + names.map(n => '(' + n + ')').join(' '))] : []));
+        }
       }
     });
     const fc = rwFinalCount(room);
     if (prevFinal !== null && fc > prevFinal) playChime();   // 문장이 확정될 때 효과음
     prevFinal = fc;
     newly.forEach(it => {
-      void it.root.offsetWidth; it.root.classList.add('pop');
+      it.newEl.classList.remove('pop'); void it.newEl.offsetWidth; it.newEl.classList.add('pop');
       if (Date.now() - lastUserScroll > 20000) { try { it.root.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {} }
     });
     progress.textContent = '확정 ' + fc + ' / ' + sents.length;
@@ -1644,7 +1695,9 @@ function viewTvRewrite(code) {
 
   app.append(el('div', { class: 'tv-wrap' }, ch.head,
     el('div', { class: 'tv-main single' },
-      el('section', { class: 'tv-panel' }, el('h2', {}, '📜 우리가 바꿔 쓴 문장 ', progress), banner, listBox)),
+      el('section', { class: 'tv-panel' }, el('h2', {}, '📜 우리가 바꿔 쓴 문장 ', progress), banner,
+        el('div', { class: 'tv-rw-cols' }, el('span', {}, ''), el('span', {}, '원래 문장'), el('span', { class: 'new' }, '✏️ 우리가 바꿔 쓴 문장')),
+        listBox)),
     ch.overlay));
 }
 
