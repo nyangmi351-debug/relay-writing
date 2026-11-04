@@ -150,6 +150,74 @@ body.tv{background:#1d2342;color:#fff;overflow:hidden;height:100vh}
 .tv-overlay .big{font-size:80px}
 .tv-overlay p{color:#cfd3ee}
 .tv-overlay .btn+.btn{margin-top:12px}
+
+/* ===== 모드 선택 / 대기 ===== */
+.chip.purple{background:#efe4ff;border-color:#d2bdf7;color:#6a32c2}
+.mode-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.mode-opt{border:3px solid var(--line);border-radius:18px;padding:14px 16px;cursor:pointer;background:#fff;text-align:left;
+  font-weight:700;transition:border-color .12s,background .12s}
+.mode-opt:hover{border-color:#ffc79e}
+.mode-opt.on{border-color:var(--orange);background:#fff4e6;box-shadow:0 0 0 3px rgba(255,138,61,.18)}
+.mode-opt .emoji{font-size:34px;line-height:1.2}
+.mode-opt .t{font-size:1.15rem}
+.wait-big{text-align:center;padding:30px 16px}
+.wait-big .emoji{font-size:64px}
+
+/* ===== 바꿔쓰기 - 교사 ===== */
+.rw-card{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px;background:#fffdf8}
+.rw-card.done{background:#f1fbf5;border-color:#a8e0c1}
+.rw-orig{background:#eceef2;color:#4a4a55;border-radius:10px;padding:6px 12px}
+.rw-final{background:#dff6e9;border:2px solid #a8e0c1;border-radius:10px;padding:8px 12px;font-weight:700;margin-top:6px}
+.rw-ch{margin:6px 0;font-weight:700;color:#9a5200}
+.rw-sub{border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+
+/* ===== 바꿔쓰기 - 학생 표 ===== */
+.rw-head,.rw-row{display:grid;grid-template-columns:1fr;gap:8px}
+.rw-head{display:none}
+.rw-row{border:2px solid var(--line);border-radius:16px;background:#fff;padding:12px;margin-bottom:12px}
+.rw-row.editing{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,61,.15)}
+.rw-row.sent{border-color:#b5cdfa;background:#f7faff}
+.rw-row.locked{border-color:#a8e0c1;background:#f1fbf5}
+.rw-no{background:var(--orange);color:#fff;border-radius:999px;width:34px;height:34px;display:inline-flex;
+  align-items:center;justify-content:center;font-weight:800}
+.rw-row.locked .rw-no{background:var(--green)}
+.rw-lab{font-size:.85rem;font-weight:800;color:var(--sub);margin-bottom:4px}
+.rw-orig-cell{background:#eceef2;color:#4a4a55;border:2px solid #dfe1e7;border-radius:12px;padding:10px 12px;
+  font-size:1.08rem}
+textarea.rw-edit{background:#fff;font-size:1.08rem;min-height:84px}
+textarea.rw-edit[readonly]{border-style:dashed;cursor:default}
+textarea.rw-edit[readonly]:focus{border-color:var(--line);box-shadow:none}
+.rw-done{background:#dff6e9;border:2px solid #a8e0c1;border-radius:12px;padding:10px 12px;font-weight:700;font-size:1.08rem}
+.rw-state{margin-top:4px;font-weight:700}
+.rw-btns{display:flex;gap:8px;flex-wrap:wrap}
+.rw-btns .btn{flex:1 1 120px}
+@media(min-width:900px){
+  .rw-head,.rw-row{grid-template-columns:40px minmax(0,1fr) minmax(0,1fr) 130px;align-items:start}
+  .rw-head{display:grid;padding:0 14px 6px;font-weight:800;color:var(--sub);font-size:.9rem}
+  .rw-row .rw-lab{display:none}
+  .rw-orig-cell{min-height:84px}
+  .rw-btns{flex-direction:column}
+  .rw-btns .btn{flex:none;width:100%}
+}
+
+/* ===== 바꿔쓰기 / 대기 - TV ===== */
+.tv-main.single{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+.tv-rw-item{display:flex;gap:1vw;align-items:flex-start;background:rgba(255,255,255,.1);color:#cfd3ee;border-radius:18px;
+  padding:1.2vh 1.2vw;margin-bottom:1.2vh;font-size:clamp(1.2rem,2.2vw,2.5rem);line-height:1.5;font-weight:600}
+.tv-rw-item.done{background:#fffaf0;color:#2d2a38}
+.tv-rw-item.pop{animation:pop .6s ease}
+.tv-rw-num{flex:none;min-width:1.7em;height:1.7em;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.8em}
+.tv-rw-item.done .tv-rw-num{background:#2fb36d}
+.tv-rw-by{display:inline-block;font-size:.55em;font-weight:800;background:#8b5cf6;color:#fff;border-radius:.6em;
+  padding:.12em .7em;margin-left:.5em;vertical-align:middle;white-space:nowrap}
+.tv-rw-ch{font-size:.62em;color:#ffd34e;margin-top:.3em;font-weight:800}
+.tv-rw-tag{font-size:.5em;font-weight:800;color:#9aa0c8;margin-right:.6em;vertical-align:middle}
+.tv-waitbig{margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.6vh}
+.tv-waitbig .code-big{font-size:clamp(3rem,9vw,9rem);font-weight:900;color:#ffd34e;letter-spacing:.1em;line-height:1}
+.tv-waitbig .qr{width:auto;min-height:0;padding:10px;border-radius:16px}
+.tv-waitbig .qr img,.tv-waitbig .qr canvas{width:min(34vh,300px)!important;height:min(34vh,300px)!important}
+.tv-waitbig .msg{font-size:clamp(1.1rem,2.2vw,2.2rem);color:#ffe7a8;font-weight:800}
 </style>
 </head>
 <body>
@@ -226,9 +294,9 @@ function copyText(text) {
   }
 }
 
-function makeQR(box, url) {
+function makeQR(box, url, size) {
   if (typeof QRCode === 'undefined') { box.textContent = 'QR을 불러오지 못했어요 (링크를 사용하세요)'; return; }
-  try { new QRCode(box, { text: url, width: 152, height: 152, correctLevel: QRCode.CorrectLevel.M }); }
+  try { new QRCode(box, { text: url, width: size || 152, height: size || 152, correctLevel: QRCode.CorrectLevel.M }); }
   catch (e) { box.textContent = 'QR 생성 실패'; }
 }
 
@@ -315,6 +383,48 @@ function sortedStory(room) {
   return Object.values((room && room.story) || {}).sort((a, b) => (a.id || 0) - (b.id || 0));
 }
 
+function fileStamp() {
+  const d = new Date(), p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes());
+}
+function downloadLines(lines, filename) {
+  const blob = new Blob(['﻿' + lines.join('\r\n') + '\r\n'], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
+
+/* ---- 내용 바꿔쓰기 모드 도우미 ----
+ * 방 데이터 구조 (기존 릴레이 방과 겹치지 않게 rw 아래에 따로 저장)
+ *   mode: 'rewrite'   (없으면 기존 릴레이 방)
+ *   rw/sentences/s001: { id: 1, text: '원래 문장' }
+ *   rw/final/s001:     { author, text, original, nonce, timestamp }   ← 확정된 문장
+ *   rw/pending/s001/홍길동: { studentName, text, nonce, timestamp } ← 승인 대기
+ *   rw/challengers/s001/홍길동: timestamp                           ← [수정]을 눌러 도전 중
+ */
+const isRewrite = room => !!room && room.mode === 'rewrite';
+function rwKey(n) { return 's' + String(n).padStart(3, '0'); }
+function normText(t) { return String(t || '').replace(/\s+/g, ' ').trim(); }
+function rwSentences(room) {
+  const s = (room && room.rw && room.rw.sentences) || {};
+  return Object.keys(s).map(k => Object.assign({ key: k }, s[k])).sort((a, b) => (a.id || 0) - (b.id || 0));
+}
+function rwFinal(room, k) { return (room && room.rw && room.rw.final && room.rw.final[k]) || null; }
+function rwPending(room, k) { return (room && room.rw && room.rw.pending && room.rw.pending[k]) || {}; }
+function rwChallengers(room, k) {
+  const c = (room && room.rw && room.rw.challengers && room.rw.challengers[k]) || {};
+  return Object.keys(c).sort((a, b) => (Number(c[a]) || 0) - (Number(c[b]) || 0));
+}
+function rwFinalCount(room) { return Object.keys((room && room.rw && room.rw.final) || {}).length; }
+function checkRewrite(text, original) {
+  if (!text) return '고친 문장을 먼저 써 주세요.';
+  if (text.length > 300) return '문장이 너무 길어요. 300자 이내로 줄여 주세요.';
+  if (text === normText(original)) return '원래 문장과 똑같아요. 한 군데 이상 고쳐서 제출해 주세요.';
+  return '';
+}
+
 /* =====================================================================
  * 1. Firebase 연결
  * ===================================================================== */
@@ -378,7 +488,7 @@ function viewHome() {
     el('div', { class: 'hero' },
       el('div', { class: 'logo' }, '📖'),
       el('h1', {}, '고유어 릴레이 글쓰기'),
-      el('p', { class: 'small' }, '예쁜 우리말 고유어를 넣어 친구들과 이야기를 이어 써요!')),
+      el('p', { class: 'small' }, '예쁜 우리말 고유어를 넣어 친구들과 이야기를 이어 쓰고, 문장을 함께 바꿔 써요!')),
     el('div', { class: 'role-grid' },
       role('👩‍🏫', '교사', '방을 만들고 문장을 승인해요', () => go(viewTeacherEntry), 'role-teacher'),
       role('🧒', '학생', '방 코드를 입력하고 입장해요', () => go(viewStudentEntry, ''), 'role-student'),
@@ -454,27 +564,102 @@ function viewTeacherEntry() {
 /* =====================================================================
  * 5. 교사 - 진행 제어판
  * ===================================================================== */
-function viewTeacherPanel(code) {
-  document.body.className = 'teacher';
-  let room = null, firstLoad = true, downloaded = false, approving = false, purging = false;
-  const nodes = {};   // 대기열 항목(입력 중인 교정 내용을 지키기 위해 재사용)
+// 교사 화면 상단(방 코드 · QR · 버튼) - 릴레이/바꿔쓰기 공용
+function teacherTopbar(code, modeLabel) {
   const stuUrl = baseUrl() + '?mode=student&room=' + code;
   const tvUrl = baseUrl() + '?mode=tv&room=' + code;
-
   const qrBlock = (title, url) => {
     const box = el('div', { class: 'qr' }); makeQR(box, url);
     return el('div', { class: 'qrblock' }, box, el('div', { class: 'small' }, title));
   };
   const statusChip = el('span', { class: 'chip' });
+  const modeChip = el('span', { class: 'chip purple', hidden: !modeLabel }, modeLabel || '');
   const topbar = el('header', { class: 'card topbar' },
     el('div', {}, el('div', { class: 'small' }, '방 코드'),
-      el('div', { class: 'bigcode', id: 'room-code' }, code.slice(0, 3) + ' ' + code.slice(3)), statusChip),
+      el('div', { class: 'bigcode', id: 'room-code' }, code.slice(0, 3) + ' ' + code.slice(3)),
+      el('div', { class: 'row', style: 'gap:6px' }, statusChip, modeChip)),
     qrBlock('📺 TV 접속 QR', tvUrl),
     qrBlock('🧒 학생 입장 QR', stuUrl),
     el('div', { class: 'toprow-btns' },
       el('button', { class: 'btn blue', onclick: () => window.open(tvUrl, '_blank') }, '📺 TV 화면 열기'),
       el('button', { class: 'btn', onclick: () => copyText(stuUrl) }, '🔗 학생 링크 복사'),
       el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '🏠 처음으로')));
+  function setStatus(st) {
+    statusChip.textContent = st === 'WAITING' ? '⏳ 시작 전' : st === 'PLAYING' ? '🟢 진행 중' : '🏁 종료됨';
+    statusChip.className = 'chip ' + (st === 'PLAYING' ? 'green' : st === 'ENDED' ? 'gray' : 'blue');
+  }
+  return { topbar, statusChip, setStatus, modeChip };
+}
+
+// 방 데이터 완전 삭제 (릴레이/바꿔쓰기 공용)
+async function purgeRoomFlow(code, ended, setPurging) {
+  const msg = ended
+    ? '방 데이터를 완전히 삭제할까요?\n삭제하면 되돌릴 수 없어요. (TXT 파일을 저장했는지 확인하세요)'
+    : '아직 수업이 끝나지 않았어요.\n그래도 방과 모든 데이터를 삭제할까요? 되돌릴 수 없어요.';
+  if (!confirm(msg)) return;
+  setPurging(true);
+  try {
+    await roomRef(code).remove();
+    store.del('relay_teacher');
+    toast('방 데이터를 모두 삭제했어요. 다음 수업에는 새 방을 만들어 주세요.', 'ok', 5000);
+    go(viewHome);
+  } catch (e) { setPurging(false); toast('삭제 실패: ' + friendlyError(e), 'error', 6000); }
+}
+
+function viewTeacherPanel(code) {
+  document.body.className = 'teacher';
+  let room = null, firstLoad = true, downloaded = false, approving = false, purging = false;
+  const nodes = {};   // 대기열 항목(입력 중인 교정 내용을 지키기 위해 재사용)
+  const modeKey = 'relay_mode_' + code;
+  let selMode = store.get(modeKey) === 'rewrite' ? 'rewrite' : 'relay';
+
+  const tb = teacherTopbar(code);
+  const topbar = tb.topbar, statusChip = tb.statusChip;
+
+  /* ---- 모드 선택 (시작 전에만) ---- */
+  const modeOpt = (mode, emoji, title, desc) => el('button', { class: 'mode-opt', id: 'mode-' + mode, type: 'button',
+    onclick: () => { selMode = mode; store.set(modeKey, mode); render(); } },
+    el('div', { class: 'emoji' }, emoji), el('div', { class: 't' }, title), el('div', { class: 'small' }, desc));
+  const optRelay = modeOpt('relay', '📖', '릴레이 글쓰기', '고유어를 넣어 한 문장씩 이야기를 이어 써요');
+  const optRewrite = modeOpt('rewrite', '✏️', '내용 바꿔쓰기', '선생님 문장을 학생들이 문장별로 고쳐 써요');
+  const modeCard = el('section', { class: 'card' },
+    el('h2', {}, '🎯 수업 모드 고르기'),
+    el('p', { class: 'small', style: 'margin-top:0' }, '이 방은 고른 모드로만 진행해요. 시작한 뒤에는 바꿀 수 없고, 다른 모드를 하려면 새 방을 만들어야 해요.'),
+    el('div', { class: 'mode-pick' }, optRelay, optRewrite));
+
+  /* ---- 바꿔쓰기 시작 설정 ---- */
+  const rwSetupKey = 'rw_setup_' + code;
+  const rwInput = el('textarea', { id: 'rw-sentences', class: 'input', rows: '8',
+    placeholder: '한 줄에 문장 하나씩 입력하세요.\n예)\n토끼는 거북이보다 빨리 달렸다.\n거북이는 쉬지 않고 천천히 걸었다.' });
+  rwInput.value = store.get(rwSetupKey) || '';
+  const rwLineInfo = el('div', { class: 'small' });
+  const rwLines = () => rwInput.value.split(/\r?\n/).map(normText).filter(Boolean);
+  const updateRwInfo = () => { rwLineInfo.textContent = '문장 ' + rwLines().length + '개 · 빈 줄은 무시해요. 시작한 뒤에는 문장을 바꿀 수 없어요.'; };
+  rwInput.addEventListener('input', () => { store.set(rwSetupKey, rwInput.value); updateRwInfo(); });
+  updateRwInfo();
+  const rwStartBtn = el('button', { id: 'btn-rw-start', class: 'btn primary big', onclick: startRewrite }, '▶ 바꿔쓰기 시작');
+  const rwSetupCard = el('section', { class: 'card' },
+    el('h2', {}, '✏️ 바꿔 쓸 문장 입력'),
+    el('div', { class: 'field' }, rwInput, rwLineInfo),
+    rwStartBtn);
+
+  async function startRewrite() {
+    try {
+      if (!room || room.status !== 'WAITING') throw new Error('이미 시작한 방이에요.');
+      const lines = rwLines();
+      if (!lines.length) throw new Error('바꿔 쓸 문장을 한 줄에 하나씩 입력해 주세요.');
+      if (lines.length > 80) throw new Error('문장은 80개까지 입력할 수 있어요.');
+      const long = lines.findIndex(t => t.length > 300);
+      if (long >= 0) throw new Error((long + 1) + '번째 문장이 너무 길어요. 300자 이내로 줄여 주세요.');
+      if (!confirm('문장 ' + lines.length + '개로 내용 바꿔쓰기를 시작할까요?\n시작하면 모드와 문장을 바꿀 수 없어요.')) return;
+      const sentences = {};
+      lines.forEach((t, i) => { sentences[rwKey(i + 1)] = { id: i + 1, text: t }; });
+      rwStartBtn.disabled = true;
+      await roomRef(code).update({ mode: 'rewrite', status: 'PLAYING', startedAt: TS(), 'rw/sentences': sentences });
+      store.del(rwSetupKey);
+      toast('내용 바꿔쓰기를 시작했어요! 🎉', 'ok');
+    } catch (e) { rwStartBtn.disabled = false; toast(friendlyError(e), 'warn', 4500); }
+  }
 
   /* ---- 규칙 설정 ---- */
   const firstInput = el('textarea', { id: 'first-sentence', class: 'input', rows: '3',
@@ -509,7 +694,7 @@ function viewTeacherPanel(code) {
       const first = firstInput.value.replace(/\s+/g, ' ').trim();
       if (!first) throw new Error('첫 문장을 입력해 주세요.');
       const b = validateBrackets(first); if (b) throw new Error(b);
-      const up = Object.assign(readRules(), { status: 'PLAYING', round: 1, startedAt: TS() });
+      const up = Object.assign(readRules(), { mode: 'relay', status: 'PLAYING', round: 1, startedAt: TS() });
       up['story/' + pad(1)] = { id: 1, author: '교사', text: first, timestamp: TS() };
       await roomRef(code).update(up);
       toast('릴레이를 시작했어요! 🎉', 'ok');
@@ -593,10 +778,6 @@ function viewTeacherPanel(code) {
     } catch (e) { toast('종료 실패: ' + friendlyError(e), 'error', 6000); }
   }
 
-  function fileStamp() {
-    const d = new Date(), p = n => String(n).padStart(2, '0');
-    return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes());
-  }
   function downloadTxt() {
     if (!room) return;
     // 형식: 학생이름: 문장 내용 (고유어는 [대괄호]로 표시된 그대로)
@@ -611,26 +792,23 @@ function viewTeacherPanel(code) {
     render();
   }
 
-  async function purge() {
-    const msg = room && room.status === 'ENDED'
-      ? '방 데이터를 완전히 삭제할까요?\n삭제하면 되돌릴 수 없어요. (TXT 파일을 저장했는지 확인하세요)'
-      : '아직 릴레이가 끝나지 않았어요.\n그래도 방과 모든 데이터를 삭제할까요? 되돌릴 수 없어요.';
-    if (!confirm(msg)) return;
-    purging = true;
-    try {
-      await roomRef(code).remove();
-      store.del('relay_teacher');
-      toast('방 데이터를 모두 삭제했어요. 다음 수업에는 새 방을 만들어 주세요.', 'ok', 5000);
-      go(viewHome);
-    } catch (e) { purging = false; toast('삭제 실패: ' + friendlyError(e), 'error', 6000); }
+  function purge() {
+    return purgeRoomFlow(code, !!room && room.status === 'ENDED', v => { purging = v; });
   }
 
   /* ---- 화면 갱신 ---- */
   function render() {
     if (!room) return;
     const st = room.status;
-    statusChip.textContent = st === 'WAITING' ? '⏳ 시작 전' : st === 'PLAYING' ? '🟢 진행 중' : '🏁 종료됨';
-    statusChip.className = 'chip ' + (st === 'PLAYING' ? 'green' : st === 'ENDED' ? 'gray' : 'blue');
+    tb.setStatus(st);
+
+    // 모드 선택: 시작 전에만 보여요
+    modeCard.hidden = st !== 'WAITING';
+    optRelay.classList.toggle('on', selMode === 'relay');
+    optRewrite.classList.toggle('on', selMode === 'rewrite');
+    const rwSel = st === 'WAITING' && selMode === 'rewrite';
+    rwSetupCard.hidden = !rwSel;
+    storyCard.hidden = rwSel;
 
     if (firstLoad) {
       firstLoad = false;
@@ -644,13 +822,16 @@ function viewTeacherPanel(code) {
     [minInput, maxInput, reqChk].forEach(i => { i.disabled = st === 'ENDED'; });
     startBtn.hidden = st !== 'WAITING';
     saveBtn.hidden = st !== 'PLAYING';
-    rulesCard.hidden = false;
+    rulesCard.hidden = rwSel;
+    tb.modeChip.hidden = st === 'WAITING';
+    tb.modeChip.textContent = '📖 릴레이 글쓰기';
     queueCard.hidden = st !== 'PLAYING';
     endBtn.hidden = st !== 'PLAYING';
     dlBtn.hidden = st === 'WAITING';
     purgeBtn.hidden = st === 'PLAYING';
     purgeBtn.disabled = st === 'ENDED' && !downloaded;
-    endHint.textContent = st === 'WAITING' ? '아직 시작 전이에요. 첫 문장을 입력하고 [릴레이 시작]을 눌러 주세요.'
+    endHint.textContent = rwSel ? '아직 시작 전이에요. 바꿔 쓸 문장을 입력하고 [바꿔쓰기 시작]을 눌러 주세요.'
+      : st === 'WAITING' ? '아직 시작 전이에요. 첫 문장을 입력하고 [릴레이 시작]을 눌러 주세요.'
       : st === 'PLAYING' ? '수업이 끝나면 [릴레이 종료]를 누르세요. 이야기가 TXT 파일로 저장돼요.'
       : (downloaded ? '저장이 끝났어요. 이제 [방 닫기]를 눌러 데이터를 완전히 삭제할 수 있어요.'
                     : '먼저 [TXT 다운로드]로 파일을 저장해야 [방 닫기]를 누를 수 있어요.');
@@ -691,13 +872,196 @@ function viewTeacherPanel(code) {
   watch(roomRef(code), snap => {
     room = snap.val();
     if (!room) { if (!purging) viewClosed('방이 삭제되었거나 찾을 수 없어요.'); return; }
+    if (isRewrite(room)) { go(viewTeacherRewrite, code); return; }   // 바꿔쓰기로 시작한 방
     render();
   });
 
-  app.append(el('div', { class: 'wrap' }, topbar,
+  app.append(el('div', { class: 'wrap' }, topbar, modeCard,
     el('div', { class: 't-grid' },
-      el('div', {}, rulesCard, queueCard),
+      el('div', {}, rulesCard, rwSetupCard, queueCard),
       el('div', {}, storyCard, stuCard, endCard))));
+}
+
+/* =====================================================================
+ * 5-2. 교사 - 내용 바꿔쓰기 제어판
+ * ===================================================================== */
+function viewTeacherRewrite(code) {
+  document.body.className = 'teacher';
+  let room = null, downloaded = false, approving = false, purging = false, onlyPending = false;
+  const cards = {};     // 문장별 카드 (입력 중인 교정 내용을 지키기 위해 재사용)
+
+  const tb = teacherTopbar(code, '✏️ 내용 바꿔쓰기');
+
+  const progress = el('span', { class: 'chip green', id: 'rw-progress' });
+  const pendTotal = el('span', { class: 'chip', id: 'rw-pending-total' });
+  const filterChk = el('input', { type: 'checkbox', id: 'rw-filter', onchange: () => { onlyPending = filterChk.checked; render(); } });
+  const listBox = el('div', { id: 'rw-teacher-list' });
+  const filterEmpty = el('div', { class: 'empty', hidden: true }, '지금 승인을 기다리는 제출이 없어요.');
+  const listCard = el('section', { class: 'card' },
+    el('h2', {}, '✏️ 문장별 승인 ', progress, ' ', pendTotal),
+    el('p', { class: 'small', style: 'margin-top:0' },
+      '문장마다 학생들이 제출한 수정안이 먼저 낸 순서로 보여요. 오탈자는 입력칸에서 고친 뒤 [승인]을 누르세요. 승인하면 그 문장은 확정되고 잠기며, 같은 문장의 다른 제출은 정리돼요.'),
+    el('label', { class: 'row small', style: 'margin-bottom:10px;cursor:pointer' }, filterChk, ' 제출이 있는 문장만 보기'),
+    filterEmpty, listBox);
+
+  const stuBox = el('div', { class: 'row' });
+  const stuCard = el('section', { class: 'card' }, el('h2', {}, '🧒 참여 학생 · 승인 횟수'), stuBox);
+
+  const endBtn = el('button', { id: 'btn-end', class: 'btn red', onclick: endRewrite }, '⏹ 바꿔쓰기 종료 · TXT 다운로드');
+  const dlBtn = el('button', { id: 'btn-dl', class: 'btn blue', onclick: () => downloadTxt() }, '⬇ TXT 다운로드');
+  const purgeBtn = el('button', { id: 'btn-purge', class: 'btn', onclick: () =>
+    purgeRoomFlow(code, !!room && room.status === 'ENDED', v => { purging = v; }) }, '🗑 방 닫기 (데이터 완전 삭제)');
+  const endHint = el('p', { class: 'small' });
+  const endCard = el('section', { class: 'card stack' }, el('h2', {}, '🏁 마무리'), endHint,
+    el('div', { class: 'row' }, endBtn, dlBtn, purgeBtn));
+
+  function makeCard(s) {
+    const finalBox = el('div', { class: 'rw-final', hidden: true });
+    const chBox = el('div', { class: 'rw-ch small' });
+    const qEmpty = el('div', { class: 'small', style: 'color:var(--sub)' }, '아직 제출된 수정안이 없어요.');
+    const qBox = el('div');
+    const root = el('div', { class: 'rw-card', id: 'rw-t-' + s.key },
+      el('div', { class: 'qhead' }, el('span', { class: 'qorder' }, String(s.id)),
+        el('span', { class: 'small', style: 'font-weight:800' }, '원래 문장')),
+      el('div', { class: 'rw-orig' }, s.text),
+      finalBox, chBox, qEmpty, qBox);
+    return { s, root, finalBox, chBox, qEmpty, qBox, items: {} };
+  }
+
+  function makeItem(k, name) {
+    const nameEl = el('span', { class: 'qname' }, name);
+    const cntEl = el('span', { class: 'chip green' });
+    const ta = el('textarea', { class: 'input', rows: '2' });
+    const btn = el('button', { class: 'btn green approve', onclick: () => approve(k, name, item) }, '✅ 승인');
+    const root = el('div', { class: 'rw-sub' },
+      el('div', { class: 'qhead' }, nameEl, cntEl),
+      ta,
+      el('div', { class: 'qfoot' }, el('span', { class: 'small' }, '✏️ 여기서 바로 교정할 수 있어요'), btn));
+    const item = { root, ta, btn, cntEl, remoteText: null, remoteNonce: null };
+    return item;
+  }
+
+  async function approve(k, name, item) {
+    if (approving) return;
+    if (!room || room.status !== 'PLAYING') return toast('지금은 승인할 수 없어요.', 'warn');
+    const finalText = normText(item.ta.value);
+    if (!finalText) return toast('문장이 비어 있어요.', 'warn');
+    approving = true; item.btn.disabled = true;
+    try {
+      const fSnap = await roomRef(code).child('rw/final/' + k).once('value');
+      if (fSnap.exists()) { toast('이미 확정된 문장이에요.', 'warn'); return; }
+      const snap = await roomRef(code).child('rw/pending/' + k + '/' + name).once('value');
+      if (!snap.exists()) { toast('이미 취소되었거나 처리된 제출이에요.', 'warn'); return; }
+      const sub = snap.val();
+      const s = (cards[k] && cards[k].s) || {};
+      const up = {};
+      up['rw/final/' + k] = { author: name, text: finalText, original: s.text || '', nonce: sub.nonce || null, timestamp: TS() };
+      up['rw/pending/' + k] = null;                       // 같은 문장의 다른 제출 정리
+      up['rw/challengers/' + k] = null;                   // 도전 중 표시도 정리
+      up['students/' + name + '/approvedCount'] = INC(1); // 승인 횟수 +1
+      await roomRef(code).update(up);
+      toast('✅ ' + s.id + '번 문장: ' + name + ' 학생의 수정안을 확정했어요!', 'ok');
+    } catch (e) { toast('승인 실패: ' + friendlyError(e), 'error', 6000); }
+    finally { approving = false; item.btn.disabled = false; }
+  }
+
+  async function endRewrite() {
+    if (!room || room.status !== 'PLAYING') return;
+    if (!confirm('내용 바꿔쓰기를 종료할까요?\n종료하면 학생들은 더 이상 제출할 수 없고, 결과가 TXT 파일로 저장돼요.')) return;
+    try {
+      await roomRef(code).update({ status: 'ENDED', 'rw/pending': null, 'rw/challengers': null, endedAt: TS() });
+      downloadTxt();
+      toast('바꿔쓰기를 종료했어요. TXT 파일을 저장했는지 확인해 주세요.', 'ok', 5000);
+    } catch (e) { toast('종료 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  function downloadTxt() {
+    if (!room) return;
+    // 형식: 원래 문장 → 바뀐 문장 (학생이름) / 확정되지 않은 문장은 (미확정)
+    const lines = rwSentences(room).map(s => {
+      const f = rwFinal(room, s.key);
+      return s.text + ' → ' + (f ? f.text + ' (' + f.author + ')' : '(미확정)');
+    });
+    downloadLines(lines, '내용바꿔쓰기_' + fileStamp() + '_' + code + '.txt');
+    downloaded = true;
+    render();
+  }
+
+  function render() {
+    if (!room) return;
+    const st = room.status;
+    tb.setStatus(st);
+    const sents = rwSentences(room);
+    const students = room.students || {};
+    let pendingAll = 0, shown = 0;
+
+    sents.forEach((s, idx) => {
+      const k = s.key;
+      let c = cards[k];
+      if (!c) { c = cards[k] = makeCard(s); }
+      if (listBox.children[idx] !== c.root) listBox.insertBefore(c.root, listBox.children[idx] || null);
+      const f = rwFinal(room, k);
+      const pend = rwPending(room, k);
+      const names = Object.keys(pend).sort((a, b) => (pend[a].timestamp || 0) - (pend[b].timestamp || 0));
+      pendingAll += f ? 0 : names.length;
+      c.root.classList.toggle('done', !!f);
+      c.root.hidden = onlyPending && (!!f || !names.length);
+      if (!c.root.hidden) shown++;
+
+      if (f) {
+        c.finalBox.hidden = false;
+        c.finalBox.replaceChildren('✅ 확정: ', f.text, ' ', el('span', { class: 'chip purple' }, f.author));
+        c.chBox.hidden = true; c.qEmpty.hidden = true;
+        Object.keys(c.items).forEach(n => { c.items[n].root.remove(); delete c.items[n]; });
+        return;
+      }
+      c.finalBox.hidden = true;
+      const ch = rwChallengers(room, k);
+      c.chBox.hidden = st !== 'PLAYING';
+      c.chBox.textContent = ch.length ? '✍️ 도전 중: ' + ch.map(n => '(' + n + ')').join(' ') : '✍️ 도전 중인 학생이 아직 없어요.';
+      c.qEmpty.hidden = names.length > 0 || st !== 'PLAYING';
+      Object.keys(c.items).forEach(n => { if (!pend[n]) { c.items[n].root.remove(); delete c.items[n]; } });
+      names.forEach((n, i) => {
+        const sub = pend[n];
+        let it = c.items[n];
+        if (!it) { it = c.items[n] = makeItem(k, n); }
+        if (it.remoteText !== sub.text || it.remoteNonce !== (sub.nonce || null)) {
+          it.ta.value = sub.text; it.remoteText = sub.text; it.remoteNonce = sub.nonce || null;
+        }
+        it.cntEl.textContent = '승인 ' + (((students[n] || {}).approvedCount) || 0) + '번';
+        it.btn.disabled = st !== 'PLAYING';
+        if (c.qBox.children[i] !== it.root) c.qBox.insertBefore(it.root, c.qBox.children[i] || null);
+      });
+    });
+    filterEmpty.hidden = !(onlyPending && shown === 0);
+    progress.textContent = '확정 ' + rwFinalCount(room) + ' / ' + sents.length;
+    pendTotal.textContent = '대기 ' + pendingAll + '건';
+
+    const stus = Object.entries(students).sort((a, b) => ((b[1] || {}).approvedCount || 0) - ((a[1] || {}).approvedCount || 0));
+    stuBox.replaceChildren(...(stus.length
+      ? stus.map(([n, v]) => el('span', { class: 'chip' + ((v && v.approvedCount) ? ' green' : '') }, n + ' · 승인 ' + ((v && v.approvedCount) || 0)))
+      : [el('span', { class: 'small' }, '아직 입장한 학생이 없어요.')]));
+
+    endBtn.hidden = st !== 'PLAYING';
+    dlBtn.hidden = st === 'WAITING';
+    purgeBtn.hidden = st === 'PLAYING';
+    purgeBtn.disabled = st === 'ENDED' && !downloaded;
+    endHint.textContent = st === 'PLAYING' ? '수업이 끝나면 [바꿔쓰기 종료]를 누르세요. "원래 문장 → 바뀐 문장 (학생이름)" 형식의 TXT 파일로 저장돼요.'
+      : (downloaded ? '저장이 끝났어요. 이제 [방 닫기]를 눌러 데이터를 완전히 삭제할 수 있어요.'
+                    : '먼저 [TXT 다운로드]로 파일을 저장해야 [방 닫기]를 누를 수 있어요.');
+  }
+
+  watch(roomRef(code), snap => {
+    room = snap.val();
+    if (!room) { if (!purging) viewClosed('방이 삭제되었거나 찾을 수 없어요.'); return; }
+    if (!isRewrite(room)) { go(viewTeacherPanel, code); return; }
+    render();
+  });
+
+  app.append(el('div', { class: 'wrap' }, tb.topbar,
+    el('div', { class: 't-grid' },
+      el('div', {}, listCard),
+      el('div', {}, stuCard, endCard))));
 }
 
 /* =====================================================================
@@ -706,7 +1070,7 @@ function viewTeacherPanel(code) {
 async function joinRoom(code, name) {
   const st = await roomRef(code).child('status').once('value');
   if (!st.exists()) throw new Error('방을 찾을 수 없어요. 방 코드를 다시 확인해 주세요.');
-  if (st.val() === 'ENDED') throw new Error('이미 끝난 릴레이예요.');
+  if (st.val() === 'ENDED') throw new Error('이미 끝난 수업이에요.');
   const sRef = roomRef(code).child('students/' + name);
   const sSnap = await sRef.once('value');
   if (sSnap.exists()) {
@@ -734,7 +1098,7 @@ function viewStudentEntry(prefillCode) {
       const again = await joinRoom(code, name);
       store.set('relay_student', { code, name });
       if (again) toast('다시 오신 걸 환영해요, ' + name + '! 기록을 이어받았어요 😊', 'ok');
-      go(viewStudentPlay, code, name);
+      go(viewStudentWait, code, name);     // 대기 화면 → 선생님이 시작하면 모드에 맞는 화면으로 자동 이동
     } catch (e) { toast(friendlyError(e), 'error', 5000); btn.disabled = false; }
   } }, '🚪 입장하기');
   app.append(el('div', { class: 'wrap narrow' },
@@ -742,6 +1106,42 @@ function viewStudentEntry(prefillCode) {
     el('div', { class: 'card stack' }, codeIn, nameIn, btn,
       el('p', { class: 'small' }, '💡 연결이 끊겨도 같은 이름으로 다시 입장하면 승인 횟수와 기록이 그대로 이어져요.')),
     el('div', { class: 'center' }, el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '← 처음으로'))));
+}
+
+// 학생 화면 위쪽 머리글 (공용)
+function studentHeader(code, name, countChip, info) {
+  return el('header', { class: 'card row' },
+    el('div', { class: 'grow' }, el('h2', { style: 'margin:0' }, '🧒 ' + name + ' ', countChip), info),
+    el('span', { class: 'chip' }, '방 ' + code),
+    el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '나가기'));
+}
+function studentRoute(room) {
+  if (room.status === 'WAITING') return viewStudentWait;
+  return isRewrite(room) ? viewStudentRewrite : viewStudentPlay;
+}
+
+/* =====================================================================
+ * 6-2. 학생 - 대기 화면 (선생님이 시작하면 모드에 맞게 자동 전환)
+ * ===================================================================== */
+function viewStudentWait(code, name) {
+  document.body.className = 'student';
+  const countChip = el('span', { class: 'chip green', id: 's-count' }, '승인 0번');
+  const people = el('span', { class: 'chip blue' }, '');
+  watch(roomRef(code), snap => {
+    const room = snap.val();
+    if (!room) { viewClosed('방이 닫혔어요.'); return; }
+    if (room.status !== 'WAITING') { go(studentRoute(room), code, name); return; }
+    const me = (room.students && room.students[name]) || {};
+    countChip.textContent = '승인 ' + (me.approvedCount || 0) + '번';
+    people.textContent = '🧒 ' + Object.keys(room.students || {}).length + '명 입장';
+  });
+  app.append(el('div', { class: 'wrap' },
+    studentHeader(code, name, countChip, el('div', { class: 'small' }, '입장 완료!')),
+    el('section', { class: 'card wait-big', id: 's-wait' },
+      el('div', { class: 'emoji' }, '⏳'),
+      el('h2', { style: 'font-size:1.5rem;margin:8px 0' }, '선생님이 곧 시작해요'),
+      el('p', { class: 'small' }, '조금만 기다려 주세요. 선생님이 시작하면 화면이 자동으로 바뀌어요.'),
+      people)));
 }
 
 /* =====================================================================
@@ -871,6 +1271,7 @@ function viewStudentPlay(code, name) {
   watch(roomRef(code), snap => {
     room = snap.val();
     if (!room) { viewClosed('방이 닫혔어요. 선생님이 릴레이를 마무리했어요.'); return; }
+    if (studentRoute(room) !== viewStudentPlay) { go(studentRoute(room), code, name); return; }
     const pend = room.pendingSubmissions && room.pendingSubmissions['sub_' + name];
     if (mySub && !pend) {
       // 내가 낸 문장이 대기열에서 사라짐 → 승인됐는지, 다른 친구가 먼저 뽑혔는지 확인
@@ -907,6 +1308,172 @@ function viewStudentPlay(code, name) {
           el('div', { class: 'toolbar' }, hlBtn, unBtn, el('span', { class: 'grow' }), wc),
           el('div', { class: 'row' }, submitBtn, cancelBtn)),
         el('section', { class: 'card' }, el('h2', {}, '📚 내가 승인받은 문장'), mineBox)))));
+}
+
+/* =====================================================================
+ * 7-2. 학생 - 내용 바꿔쓰기 (문장별 표)
+ * ===================================================================== */
+function viewStudentRewrite(code, name) {
+  document.body.className = 'student';
+  let room = null, firstSnap = true;
+  const draftKey = 'rw_draft_' + code + '_' + name;      // 새로고침해도 입력 중인 내용 유지
+  const drafts = store.get(draftKey) || {};
+  const saveDrafts = () => store.set(draftKey, drafts);
+  const editing = new Set();     // [수정]을 눌러 도전 중인 문장
+  const mySubs = {};             // 제출해서 승인을 기다리는 문장 { key: {nonce, text} }
+  const rows = {};
+
+  const countChip = el('span', { class: 'chip green', id: 's-count' }, '승인 0번');
+  const info = el('div', { class: 'small' });
+  const notice = el('div', { class: 'notice', hidden: true });
+  const listBox = el('div', { id: 'rw-student-list' });
+
+  function makeRow(s) {
+    const k = s.key;
+    const ta = el('textarea', { class: 'input rw-edit', rows: '2', maxlength: '400', id: 'rw-ta-' + k });
+    ta.value = drafts[k] != null ? drafts[k] : s.text;   // 처음에는 원문이 복사되어 있어요
+    ta.readOnly = true;
+    ta.addEventListener('input', () => { drafts[k] = ta.value; saveDrafts(); });
+    const editBtn = el('button', { class: 'btn blue rw-edit-btn', onclick: () => startEdit(s) }, '✏️ 수정');
+    const stopBtn = el('button', { class: 'btn ghost rw-stop-btn', onclick: () => stopEdit(s) }, '그만두기');
+    const subBtn = el('button', { class: 'btn primary rw-sub-btn', onclick: () => submit(s) }, '📤 제출');
+    const cancelBtn = el('button', { class: 'btn red rw-cancel-btn', onclick: () => cancel(s) }, '↩ 제출 취소');
+    const state = el('div', { class: 'small rw-state' });
+    const doneBox = el('div', { class: 'rw-done', hidden: true });
+    const root = el('div', { class: 'rw-row', id: 'rw-row-' + k },
+      el('div', {}, el('span', { class: 'rw-no' }, String(s.id))),
+      el('div', {}, el('div', { class: 'rw-lab' }, '원래 문장'), el('div', { class: 'rw-orig-cell' }, s.text)),
+      el('div', {}, el('div', { class: 'rw-lab' }, '내가 고쳐보자!'), ta, doneBox, state),
+      el('div', { class: 'rw-btns' }, editBtn, stopBtn, subBtn, cancelBtn));
+    return { s, root, ta, editBtn, stopBtn, subBtn, cancelBtn, state, doneBox };
+  }
+
+  const playing = () => !!room && room.status === 'PLAYING';
+
+  async function startEdit(s) {
+    const k = s.key;
+    if (!playing() || rwFinal(room, k)) return;
+    editing.add(k);
+    renderRow(s);
+    try { rows[k].ta.focus(); } catch (e) {}
+    try { await roomRef(code).child('rw/challengers/' + k + '/' + name).set(TS()); }
+    catch (e) { editing.delete(k); renderRow(s); toast('수정 시작 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  async function stopEdit(s) {
+    const k = s.key;
+    if (mySubs[k] && !confirm('그만두면 제출한 문장도 함께 취소돼요. 그만둘까요?')) return;
+    editing.delete(k);
+    delete mySubs[k];
+    renderRow(s);
+    try {
+      const up = {};
+      up['rw/challengers/' + k + '/' + name] = null;
+      up['rw/pending/' + k + '/' + name] = null;
+      await roomRef(code).update(up);
+      toast(s.id + '번 문장 도전을 그만뒀어요. 고친 내용은 남아 있어요.', 'info');
+    } catch (e) { toast('그만두기 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  async function submit(s) {
+    const k = s.key, r = rows[k];
+    if (!playing() || rwFinal(room, k) || !editing.has(k) || mySubs[k]) return;
+    const text = normText(r.ta.value);
+    const err = checkRewrite(text, s.text);
+    if (err) { toast(err, 'warn', 4500); r.ta.classList.remove('shake'); void r.ta.offsetWidth; r.ta.classList.add('shake'); return; }
+    const nonce = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    mySubs[k] = { nonce, text };
+    r.ta.value = text; drafts[k] = text; saveDrafts();
+    renderRow(s);
+    try {
+      const up = {};
+      up['rw/pending/' + k + '/' + name] = { studentName: name, text, nonce, timestamp: TS() };
+      up['students/' + name + '/lastActive'] = TS();
+      await roomRef(code).update(up);
+      toast(s.id + '번 문장을 제출했어요! 선생님의 승인을 기다려요 ⏳', 'ok');
+    } catch (e) { delete mySubs[k]; renderRow(s); toast('제출 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  async function cancel(s) {
+    const k = s.key;
+    if (!mySubs[k]) return;
+    delete mySubs[k];
+    renderRow(s);
+    try {
+      await roomRef(code).child('rw/pending/' + k + '/' + name).remove();
+      toast('제출을 취소했어요. 고쳐서 다시 낼 수 있어요 ✏️', 'ok');
+    } catch (e) { toast('취소 실패: ' + friendlyError(e), 'error', 6000); }
+  }
+
+  function renderRow(s) {
+    const k = s.key, r = rows[k];
+    if (!r || !room) return;
+    const f = rwFinal(room, k), sub = mySubs[k], ed = editing.has(k), on = playing();
+    r.root.className = 'rw-row' + (f ? ' locked' : sub ? ' sent' : (ed && on) ? ' editing' : '');
+    r.ta.hidden = !!f;
+    r.doneBox.hidden = !f;
+    if (f) r.doneBox.replaceChildren('✅ ', f.text, ' ',
+      el('span', { class: 'chip purple' }, f.author === name ? f.author + ' (나) 🎉' : f.author));
+    r.ta.readOnly = !on || !!f || !ed || !!sub;
+    r.editBtn.hidden = !!f || ed || !on;
+    r.stopBtn.hidden = !!f || !ed || !on;
+    r.subBtn.hidden = !!f || !!sub || !ed || !on;
+    r.cancelBtn.hidden = !sub || !on || !!f;
+    r.state.textContent = f ? '' : !on ? ''
+      : sub ? '⏳ 선생님의 승인을 기다리는 중이에요. 고치려면 [제출 취소]를 누르세요.'
+      : ed ? '✏️ 고치는 중이에요. 다 고치면 [제출]을 누르세요.' : '';
+    r.state.style.color = sub ? '#2456b0' : '#d9731a';
+  }
+
+  function render() {
+    if (!room) return;
+    const sents = rwSentences(room);
+    const me = (room.students && room.students[name]) || {};
+    countChip.textContent = '승인 ' + (me.approvedCount || 0) + '번';
+    info.textContent = '확정된 문장 ' + rwFinalCount(room) + ' / ' + sents.length + ' · 고칠 문장을 골라 [수정]을 눌러요';
+    if (room.status === 'ENDED') { notice.hidden = false; notice.className = 'notice end'; notice.textContent = '🎉 바꿔쓰기가 끝났어요. 모두 수고했어요!'; }
+    else notice.hidden = true;
+    sents.forEach(renderRow);
+  }
+
+  watch(roomRef(code), snap => {
+    room = snap.val();
+    if (!room) { viewClosed('방이 닫혔어요. 선생님이 수업을 마무리했어요.'); return; }
+    if (studentRoute(room) !== viewStudentRewrite) { go(studentRoute(room), code, name); return; }
+    const sents = rwSentences(room);
+    sents.forEach(s => {
+      const k = s.key;
+      if (!rows[k]) { rows[k] = makeRow(s); listBox.append(rows[k].root); }
+      const f = rwFinal(room, k);
+      const p = rwPending(room, k)[name];
+      if (f) {
+        if (!firstSnap && (mySubs[k] || editing.has(k))) {
+          if (f.author === name) toast('🎉 ' + s.id + '번 문장, 내가 고친 문장이 확정됐어요!', 'ok', 5000);
+          else toast(s.id + '번 문장은 ' + f.author + ' 친구의 문장으로 확정됐어요.', 'info', 5000);
+        }
+        delete mySubs[k]; editing.delete(k);
+        return;
+      }
+      if (mySubs[k] && !p) delete mySubs[k];          // 대기열에서 사라짐 (종료 등)
+      if (!mySubs[k] && p) {                           // 새로고침 후: 승인 대기 중인 문장 되살리기
+        mySubs[k] = { nonce: p.nonce, text: p.text };
+        rows[k].ta.value = p.text;
+      }
+      if (rwChallengers(room, k).indexOf(name) >= 0) editing.add(k);   // 새로고침 후: 도전 중 상태 되살리기
+    });
+    firstSnap = false;
+    render();
+  });
+
+  app.append(el('div', { class: 'wrap' },
+    studentHeader(code, name, countChip, info),
+    el('section', { class: 'card' },
+      el('h2', {}, '✏️ 내용 바꿔쓰기'),
+      notice,
+      el('p', { class: 'small', style: 'margin-top:0' },
+        '① 고치고 싶은 문장의 [수정]을 눌러요 ② "내가 고쳐보자!" 칸에서 문장을 고쳐요 ③ 다 고치면 [제출]! 제출한 뒤에도 취소하고 다시 고칠 수 있어요.'),
+      el('div', { class: 'rw-head' }, el('div', {}, '번호'), el('div', {}, '원래 문장'), el('div', {}, '내가 고쳐보자!'), el('div', {}, '')),
+      listBox)));
 }
 
 /* =====================================================================
@@ -950,32 +1517,143 @@ function viewTvEntry() {
     el('div', { class: 'center' }, el('button', { class: 'btn ghost', onclick: () => go(viewHome) }, '← 처음으로'))));
 }
 
-function viewTvPlay(code) {
-  document.body.className = 'tv';
-  let room = null, prevCount = null, lastUserScroll = 0;
-  const rendered = new Set();
-
+// TV 머리글 + 소리 켜기 안내 (모든 TV 화면 공용). 소리 안내는 처음 한 번만 보여요.
+let tvSoundAsked = false;
+function tvChrome(code, title) {
   const soundBtn = el('button', { class: 'btn ghost', style: 'color:#fff;border-color:rgba(255,255,255,.4)', onclick: () => {
     if (soundOn) { soundOn = false; soundBtn.textContent = '🔇 소리 꺼짐'; }
     else { initAudio(); playChime(); soundBtn.textContent = '🔔 소리 켜짐'; }
-  } }, '🔇 소리 꺼짐');
+  } }, soundOn ? '🔔 소리 켜짐' : '🔇 소리 꺼짐');
 
-  const overlay = el('div', { class: 'tv-overlay', id: 'tv-overlay' }, el('div', { class: 'box stack' },
-    el('div', { class: 'big' }, '📺'), el('h2', {}, '교실 TV 화면'),
-    el('p', {}, '버튼을 눌러 시작하면 문장이 승인될 때마다 "딩동댕" 효과음이 나와요.'),
-    el('button', { id: 'tv-sound-on', class: 'btn primary huge', onclick: () => {
-      initAudio(); playChime(); soundBtn.textContent = '🔔 소리 켜짐'; overlay.remove();
-    } }, '🔔 소리 켜고 시작'),
-    el('div', {}, el('button', { id: 'tv-sound-off', class: 'btn ghost', style: 'color:#fff;border-color:rgba(255,255,255,.4)',
-      onclick: () => overlay.remove() }, '소리 없이 보기'))));
+  let overlay = null;
+  if (!tvSoundAsked) {
+    overlay = el('div', { class: 'tv-overlay', id: 'tv-overlay' }, el('div', { class: 'box stack' },
+      el('div', { class: 'big' }, '📺'), el('h2', {}, '교실 TV 화면'),
+      el('p', {}, '버튼을 눌러 시작하면 문장이 승인될 때마다 "딩동댕" 효과음이 나와요.'),
+      el('button', { id: 'tv-sound-on', class: 'btn primary huge', onclick: () => {
+        tvSoundAsked = true; initAudio(); playChime(); soundBtn.textContent = '🔔 소리 켜짐'; overlay.remove();
+      } }, '🔔 소리 켜고 시작'),
+      el('div', {}, el('button', { id: 'tv-sound-off', class: 'btn ghost', style: 'color:#fff;border-color:rgba(255,255,255,.4)',
+        onclick: () => { tvSoundAsked = true; overlay.remove(); } }, '소리 없이 보기'))));
+  }
 
   const qrBox = el('div', { class: 'qr' }); makeQR(qrBox, baseUrl() + '?mode=student&room=' + code);
   const head = el('div', { class: 'tv-head' },
-    el('h1', {}, '📖 고유어 릴레이 글쓰기'),
+    el('h1', {}, title),
     el('span', { class: 'grow' }),
     el('div', {}, el('div', { class: 'small', style: 'color:#cfd3ee' }, '학생 입장 코드'),
       el('div', { class: 'code', id: 'tv-room-code' }, code.slice(0, 3) + ' ' + code.slice(3))),
     qrBox, soundBtn);
+  return { head, overlay };
+}
+
+function tvRoute(room) {
+  if (room.status === 'WAITING') return viewTvWait;
+  return isRewrite(room) ? viewTvRewrite : viewTvPlay;
+}
+function tvMissing() {
+  viewMessage('🔒', '방을 찾을 수 없어요', '방 코드를 다시 확인하거나, 선생님이 방을 닫았을 수 있어요.', '처음으로', () => go(viewHome));
+}
+
+/* ---- TV 대기 화면: 방 코드와 QR을 크게 ---- */
+function viewTvWait(code) {
+  document.body.className = 'tv';
+  const ch = tvChrome(code, '📖 우리말 글쓰기 교실');
+  const bigQr = el('div', { class: 'qr' }); makeQR(bigQr, baseUrl() + '?mode=student&room=' + code, 300);
+  const people = el('div', { class: 'msg', id: 'tv-wait-people' }, '');
+  watch(roomRef(code), snap => {
+    const room = snap.val();
+    if (!room) return tvMissing();
+    if (room.status !== 'WAITING') { go(tvRoute(room), code); return; }
+    const n = Object.keys(room.students || {}).length;
+    people.textContent = n ? '🧒 ' + n + '명 입장했어요 · 선생님이 곧 시작해요!' : '⏳ 선생님이 곧 시작해요!';
+  });
+  app.append(el('div', { class: 'tv-wrap' }, ch.head,
+    el('div', { class: 'tv-main single' },
+      el('section', { class: 'tv-panel' },
+        el('div', { class: 'tv-waitbig', id: 'tv-waitbig' },
+          el('div', { class: 'msg', style: 'color:#cfd3ee' }, '태블릿으로 QR을 찍거나 방 코드를 입력하세요'),
+          el('div', { class: 'code-big' }, code.slice(0, 3) + ' ' + code.slice(3)),
+          bigQr, people))),
+    ch.overlay));
+}
+
+/* ---- TV 바꿔쓰기 화면: 확정된 문장 + 도전 중인 학생 이름만 ---- */
+function viewTvRewrite(code) {
+  document.body.className = 'tv';
+  let room = null, prevFinal = null, lastUserScroll = 0;
+  const items = {};
+  const ch = tvChrome(code, '✏️ 내용 바꿔쓰기');
+  const listBox = el('div', { class: 'tv-story', id: 'tv-rw' });
+  const progress = el('span', { class: 'chip green' }, '');
+  const banner = el('div', { class: 'tv-banner', hidden: true }, '🎉 바꿔쓰기가 끝났어요! 모두 수고했어요 🎉');
+  ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(ev =>
+    listBox.addEventListener(ev, () => { lastUserScroll = Date.now(); }, { passive: true }));
+
+  function makeItem(s) {
+    const textEl = el('span', {});
+    const tagEl = el('span', { class: 'tv-rw-tag' }, '원래 문장');
+    const byEl = el('span', { class: 'tv-rw-by', hidden: true });
+    const chEl = el('div', { class: 'tv-rw-ch', hidden: true });
+    const root = el('div', { class: 'tv-rw-item', id: 'tv-rw-' + s.key },
+      el('span', { class: 'tv-rw-num' }, String(s.id)),
+      el('div', { style: 'flex:1;min-width:0' }, el('div', {}, tagEl, textEl, byEl), chEl));
+    return { root, textEl, tagEl, byEl, chEl };
+  }
+
+  watch(roomRef(code), snap => {
+    room = snap.val();
+    if (!room) return tvMissing();
+    if (tvRoute(room) !== viewTvRewrite) { go(tvRoute(room), code); return; }
+    const sents = rwSentences(room);
+    const newly = [];
+    sents.forEach(s => {
+      const k = s.key;
+      let it = items[k];
+      if (!it) { it = items[k] = makeItem(s); listBox.append(it.root); }
+      const f = rwFinal(room, k);
+      if (f) {
+        const wasDone = it.root.classList.contains('done');
+        it.root.className = 'tv-rw-item done';
+        it.tagEl.hidden = true;
+        it.textEl.textContent = f.text;                       // 확정된 문장은 고정
+        it.byEl.hidden = false; it.byEl.textContent = f.author; // 승인된 학생 이름 (다른 색)
+        it.chEl.hidden = true;
+        if (!wasDone && prevFinal !== null) newly.push(it);
+      } else {
+        it.root.className = 'tv-rw-item';
+        it.tagEl.hidden = false;
+        it.textEl.textContent = s.text;
+        it.byEl.hidden = true;
+        // 수정 중이거나 제출한 문장 내용은 보여 주지 않고, 도전 중인 학생 이름만
+        const names = room.status === 'PLAYING' ? rwChallengers(room, k) : [];
+        it.chEl.hidden = !names.length;
+        it.chEl.textContent = '✍️ 도전 중 ' + names.map(n => '(' + n + ')').join(' ');
+      }
+    });
+    const fc = rwFinalCount(room);
+    if (prevFinal !== null && fc > prevFinal) playChime();   // 문장이 확정될 때 효과음
+    prevFinal = fc;
+    newly.forEach(it => {
+      void it.root.offsetWidth; it.root.classList.add('pop');
+      if (Date.now() - lastUserScroll > 20000) { try { it.root.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {} }
+    });
+    progress.textContent = '확정 ' + fc + ' / ' + sents.length;
+    banner.hidden = room.status !== 'ENDED';
+  });
+
+  app.append(el('div', { class: 'tv-wrap' }, ch.head,
+    el('div', { class: 'tv-main single' },
+      el('section', { class: 'tv-panel' }, el('h2', {}, '📜 우리가 바꿔 쓴 문장 ', progress), banner, listBox)),
+    ch.overlay));
+}
+
+function viewTvPlay(code) {
+  document.body.className = 'tv';
+  let room = null, prevCount = null, lastUserScroll = 0;
+  const rendered = new Set();
+  const ch = tvChrome(code, '📖 고유어 릴레이 글쓰기');
+  const head = ch.head, overlay = ch.overlay;
 
   const storyBox = el('div', { class: 'tv-story', id: 'tv-story' });
   const banner = el('div', { class: 'tv-banner', hidden: true }, '🎉 릴레이가 끝났어요! 모두 수고했어요 🎉');
@@ -1018,7 +1696,8 @@ function viewTvPlay(code) {
 
   watch(roomRef(code), snap => {
     room = snap.val();
-    if (!room) { viewMessage('🔒', '방을 찾을 수 없어요', '방 코드를 다시 확인하거나, 선생님이 방을 닫았을 수 있어요.', '처음으로', () => go(viewHome)); return; }
+    if (!room) return tvMissing();
+    if (tvRoute(room) !== viewTvPlay) { go(tvRoute(room), code); return; }
     const list = sortedStory(room);
     const grew = prevCount !== null && list.length > prevCount;
     renderStory(list);
